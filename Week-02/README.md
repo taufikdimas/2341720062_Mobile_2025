@@ -4,8 +4,8 @@
 
 ## **1. Modifikasilah kode pada baris 3 di VS Code atau Editor Code favorit Anda berikut ini agar mendapatkan keluaran (output) sesuai yang diminta!Output yang diminta (Gantilah Fulan dengan nama Anda):**
 
-![alt text](image.png)<br>
-![alt text](image-1.png)<br>
+![alt text](img/image.png)<br>
+![alt text](img/image-1.png)<br>
 
 ### **Hasil Modifikasi Kode**
 
