@@ -24,7 +24,7 @@ void main() {
 
 > Output
 
-![Outpu](img/P1.png)
+![Output](img/p1.png)
 
 > Hasil Running
 
@@ -49,7 +49,7 @@ void main() {
 
 > Output
 
-![Output](img/P12.png)
+![Output](img/p12.png)
 
 ## **Praktikum 2: Eksperimen Tipe Data Set**
 
@@ -66,7 +66,7 @@ void main() {
 
 > Output
 
-![Output](img/P2.png)
+![Output](img/p2.png)
 
 ### **Langkah 3**
 
@@ -91,7 +91,7 @@ void main() {
 
 > Output
 
-![Output](img/P22.png)
+![Output](img/p22.png)
 
 ### **Modifikasi Lngkah 3**
 
@@ -104,7 +104,7 @@ void main() {
 ```
 
 > Output
-> ![Output](img/P23.png)
+> ![Output](img/p23.png)
 
 ## **Praktikum 3: Eksperimen Tipe Data Maps**
 
@@ -123,7 +123,7 @@ void main() {
 
 > Output
 
-![Output](img/P31.png)
+![Output](img/p31.png)
 
 ### **Langkah 3**
 
@@ -147,7 +147,7 @@ void main() {
 
 > Output
 
-![Output](img/P32.png)
+![Output](img/p32.png)
 
 ### **Modifikasi Langkah 3**
 
@@ -192,7 +192,7 @@ void main() {
 ```
 
 > Output
-> ![Output](img/P33.png)
+> ![Output](img/p33.png)
 
 ## **Praktikum 4: Eksperimen Tipe Data List: Spread dan Control-flow Operators**
 
@@ -214,14 +214,14 @@ print(list2.length);
 
 > Output
 
-![Outpu](img/P41.png)
+![Outpu](img/p41.png)
 
 > Error
 
 - Error terjadi karena variabel list1 tidak ada dalam kode. Seharusnya yang dicetak adalah list, bukan list1.sehingga akan muncul error: Undefined name 'list1'.
 
 > Output setelah Diperbaiki
-> ![Outpu](img/P42.png)
+> ![Outpu](img/p42.png)
 
 ### **Langkah 3**
 
@@ -239,7 +239,7 @@ print(list3.length);
 
 > Output
 
-![Output](img/P43.png)
+![Output](img/p43.png)
 
 > Error
 
@@ -247,7 +247,7 @@ print(list3.length);
 
 > Output Setelah Di perbaiki
 
-![Output](img/P44.png)
+![Output](img/p44.png)
 
 ### **Modifikasi Langkah 3**
 
@@ -264,7 +264,7 @@ print('NIM dengan join: ${nim.join()}');
 
 > Output
 
-![Output](img/P45.png)
+![Output](img/p45.png)
 
 ### **Langkah 4**
 
@@ -284,7 +284,7 @@ print('NIM dengan join: ${nim.join()}');
 
 > Output
 
-![Output](img/P46.png)
+![Output](img/p46.png)
 
 > Error
 
