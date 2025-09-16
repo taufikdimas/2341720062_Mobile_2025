@@ -437,7 +437,160 @@ print('NIM dengan join: ${nim.join()}');
 
 ![Output](img/p56.png)
 
-```
+## Tugas Praktikum
 
+1. Jelaskan yang dimaksud Functions dalam bahasa Dart!
 
-```
+   > Function adalah blok kode yang didefinisikan untuk menjalankan tugas tertentu dan dapat dipanggil (dipakai) berkali-kali.  
+   > Keuntungan menggunakan function:
+   >
+   > - Kode lebih terstruktur dan mudah dibaca.
+   > - Mengurangi pengulangan (reusable).
+
+2. Jelaskan jenis-jenis parameter di Functions beserta contoh sintaksnya!
+
+   > a. Positional Parameter -> Parameter yang harus diisi sesuai urutan.
+
+   ```
+   void tambah(int a, int b) {
+     print(a + b);
+   }
+
+   void main() => tambah(3, 4); // Output: 7
+
+   ```
+
+   > b. Optional Positional Parameter => Parameter yang bersifat opsional, ditulis dalam [ ].
+
+   ```
+   void sapa(String nama, [String? pesan]) {
+   print('Halo $nama ${pesan ?? ""}');
+   }
+   void main() => sapa('Taufik');
+
+   ```
+
+   > c. Named Parameter => Parameter dengan nama, ditulis dalam { }, dapat diberi nilai default.
+
+   ```
+   void buatAkun({required String user, int umur = 0}) {
+   print('User: $user, Umur: $umur');
+   }
+   void main() => buatAkun(user: 'Dimas', umur: 21);
+
+   ```
+
+   > d. Default Parameter => Memberikan nilai default bila argumen tidak diisi.
+   >
+   > - (Contoh di atas `umur = 0` termasuk default parameter.)
+
+3. Jelaskan maksud Functions sebagai first-class objects beserta contoh sintaknya!
+
+   > Di Dart, function diperlakukan seperti objek biasa.<br>
+   > Artinya:
+   >
+   > - Dapat disimpan dalam variabel.
+   > - Dapat dikirim sebagai parameter.
+   > - Dapat dikembalikan dari function lain.
+   >
+   > **Contoh:**
+   >
+   > ```dart
+   > // Function disimpan dalam variabel
+   > int tambah(int a, int b) => a + b;
+   > var operasi = tambah;
+   > print(operasi(2, 3)); // Output: 5
+   >
+   > // Function sebagai parameter
+   > void hitung(int a, int b, int Function(int, int) func) {
+   >   print(func(a, b));
+   > }
+   > hitung(4, 5, tambah); // Output: 9
+   >
+   > // Function dikembalikan dari function lain
+   > Function kali(int faktor) {
+   >   return (int x) => x * faktor;
+   > }
+   > var kaliDua = kali(2);
+   > print(kaliDua(6)); // Output: 12
+   > ```
+
+4. Apa itu Anonymous Functions? Jelaskan dan berikan contohnya!
+
+   > **Anonymous Functions** adalah fungsi tanpa nama yang biasanya digunakan sebagai argumen atau untuk operasi sederhana. Anonymous function dapat langsung didefinisikan di tempat tanpa perlu deklarasi terpisah.
+   >
+   > **Contoh:**
+   >
+   > ```dart
+   > // Anonymous function sebagai parameter
+   > var angka = [1, 2, 3];
+   > angka.forEach((item) {
+   >   print(item);
+   > });
+   >
+   > // Anonymous function dengan sintaks singkat
+   > var kaliDua = (int x) => x * 2;
+   > print(kaliDua(5)); // Output: 10
+   > ```
+
+5. Jelaskan perbedaan Lexical scope dan Lexical closures! Berikan contohnya!
+
+   > **Lexical Scope** adalah aturan penentuan variabel berdasarkan lokasi penulisan kode (struktur blok kode). Variabel hanya bisa diakses di dalam scope tempat ia dideklarasikan.
+   >
+   > **Lexical Closure** adalah fungsi yang "menangkap" variabel dari scope di sekitarnya, sehingga variabel tersebut tetap bisa diakses meskipun scope asalnya sudah selesai dieksekusi.
+   >
+   > **Contoh Lexical Scope:**
+   >
+   > ```dart
+   > void main() {
+   >   int x = 10;
+   >   void tampilX() {
+   >     print(x); // x bisa diakses karena berada dalam scope main
+   >   }
+   >   tampilX();
+   > }
+   > ```
+   >
+   > **Contoh Lexical Closure:**
+   >
+   > ```dart
+   > Function buatCounter() {
+   >   int count = 0;
+   >   return () {
+   >     count++;
+   >     print(count);
+   >   };
+   > }
+   >
+   > void main() {
+   >   var counter = buatCounter();
+   >   counter(); // Output: 1
+   >   counter(); // Output: 2
+   > }
+   > ```
+   >
+   > Pada contoh closure di atas, fungsi yang dikembalikan tetap bisa mengakses variabel `count` meskipun fungsi `buatCounter` sudah selesai dijalankan.
+
+6. Jelaskan dengan contoh cara membuat return multiple value di Functions!
+   > Di Dart, untuk mengembalikan lebih dari satu nilai dari sebuah function, kita bisa menggunakan tipe data `Record` (tuple) atau `Map`. Cara paling umum adalah dengan `Record`, yang memungkinkan function mengembalikan beberapa nilai sekaligus.`
+   > **Contoh Program:**
+   >
+   > ```dart
+   > // Mengembalikan dua nilai menggunakan Record (tuple)
+   > (int, int) hitung(int a, int b) {
+   >   int jumlah = a + b;
+   >   int selisih = a - b;
+   >   return (jumlah, selisih);
+   > }
+   >
+   > void main() {
+   >   var hasil = hitung(8, 3);
+   >   print('Jumlah: ${hasil.$1}, Selisih: ${hasil.$2}');
+   > }
+   > ```
+   >
+   > Output:
+   >
+   > ```
+   > Jumlah: 11, Selisih: 5
+   > ```
