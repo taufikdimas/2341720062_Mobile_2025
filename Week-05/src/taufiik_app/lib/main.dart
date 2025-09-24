@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       label: Text('Favorites'),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.verified_user),
+                      icon: Icon(Icons.person),
                       label: const Text('Profile'),
                     ),
                   ],
