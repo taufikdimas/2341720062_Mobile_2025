@@ -1,4 +1,4 @@
-# **Codelab #06 | Layout dan Navigasi**
+# **Codelab #06 | Layout dan si**
 
 ---
 
@@ -415,3 +415,226 @@ class MyApp extends StatelessWidget {
 > Tampilan Hasil
 
 ![Output](img/09.png)
+
+## **Praktikum 5: Membangun Navigasi di Flutter**
+
+### **Langkah 1: Siapkan project baru**
+
+![Output](img/1o.png)
+
+### **Langkah 2: Mendefinisikan Route**
+
+> - Buatlah dua buah file dart dengan nama home_page.dart dan item_page.dart pada folder pages. Untuk masing-masing file, deklarasikan class HomePage pada file home_page.dart dan ItemPage pada item_page.dart. Turunkan class dari StatelessWidget
+
+> - item_page.dart
+
+```
+import 'package:flutter/material.dart';
+
+class ItemPage extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Item Page')),
+      body: const Center(child: Text('Ini adalah halaman Item')),
+    );
+  }
+}
+```
+
+> - home_page.dart
+
+```
+import 'package:flutter/material.dart';
+
+class HomePage extends StatelessWidget {
+  static const String routeName = '/home';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Home Page')),
+      body: const Center(child: Text('Welcome to Home Page')),
+    );
+  }
+}
+```
+
+### **Langkah 3: Lengkapi Kode di main.dart**
+
+> Setelah kedua halaman telah dibuat dan didefinisikan, bukalah file main.dart. Pada langkah ini anda akan mendefinisikan Route untuk kedua halaman tersebut. Definisi penamaan route harus bersifat unique. Halaman HomePage didefinisikan sebagai /. Dan halaman ItemPage didefinisikan sebagai /item. Untuk mendefinisikan halaman awal, anda dapat menggunakan named argument initialRoute.
+
+> Kode Program
+
+```
+import 'package:flutter/material.dart';
+import 'package:belanja_27/pages/home_page.dart';
+import 'package:belanja_27/pages/item_page.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Tumbas App',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/item': (context) => const ItemPage(),
+      },
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+    );
+  }
+}
+```
+
+### **Langkah 4: Membuat data model**
+
+> Sebelum melakukan perpindahan halaman dari HomePage ke ItemPage, dibutuhkan proses pemodelan data. Pada desain mockup, dibutuhkan dua informasi yaitu nama dan harga. Untuk menangani hal ini, buatlah sebuah file dengan nama item.dart dan letakkan pada folder models. Pada file ini didefinisikan pemodelan data yang dibutuhkan. Ilustrasi kode yang dibutuhkan
+
+> item.dart
+
+```
+class Item {
+  final String name;
+  final int price;
+
+  Item({required this.name, required this.price});
+}
+```
+
+### **Langkah 5: Lengkapi kode di class HomePage**
+
+> Pada halaman HomePage terdapat ListView widget. Sumber data ListView diambil dari model List dari object Item
+
+> Kode Program
+
+```
+import 'package:flutter/material.dart';
+import 'package:belanja_27/models/item.dart';
+
+class HomePage extends StatelessWidget {
+  static const String routeName = '/';
+  const HomePage({Key? key}) : super(key: key);
+
+  final List<Item> items = const [
+    Item(name: 'Sugar', price: 5000),
+    Item(name: 'Salt', price: 2000),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Tumbas App')),
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return ListTile(
+            title: Text(item.name),
+            subtitle: Text('Price: Rp ${item.price}'),
+            onTap: () => Navigator.pushNamed(context, '/item'),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+![Output](img/11.png)
+
+### **Langkah 6: Membuat ListView dan itemBuilder**
+
+> Untuk menampilkan ListView pada praktikum ini digunakan itemBuilder. Data diambil dari definisi model yang telah dibuat sebelumnya. Untuk menunjukkan batas data satu dan berikutnya digunakan widget Card
+
+> Tampilan
+
+![Output](img/12.png)
+
+### **Langkah 7: Menambahkan aksi pada ListView**
+
+> Item pada ListView saat ini ketika ditekan masih belum memberikan aksi tertentu. Untuk menambahkan aksi pada ListView dapat digunakan widget InkWell atau GestureDetector. Perbedaan utamanya InkWell merupakan material widget yang memberikan efek ketika ditekan. Sedangkan GestureDetector bersifat umum dan bisa juga digunakan untuk gesture lain selain sentuhan. Pada praktikum ini akan digunakan widget InkWell.
+
+![Output](img/001.GIF)
+
+## **Tugas Pratikum 2**
+
+> 1. Untuk melakukan pengiriman data ke halaman berikutnya, cukup menambahkan informasi arguments pada penggunaan Navigator<br>
+
+```
+itemBuilder: (context, index) {
+          final item = items[index];
+          return ListTile(
+            title: Text(item.name),
+            subtitle: Text('Price: Rp ${item.price}'),
+            onTap: () => Navigator.pushNamed(context, '/item'),
+          );
+        },
+```
+
+> 2. Pembacaan nilai yang dikirimkan pada halaman sebelumnya dapat dilakukan menggunakan ModalRoute. Tambahkan kode berikut pada blok fungsi build dalam halaman ItemPage. Setelah nilai didapatkan, anda dapat menggunakannya seperti penggunaan variabel pada umumnya.<br>
+
+```
+Widget build(BuildContext context) {
+  final itemArgs = (widget.item ?? ModalRoute.of(context)?.settings.arguments) as Item;
+    final photos = itemArgs.photos.isNotEmpty
+        ? itemArgs.photos
+        : (itemArgs.photo != null ? [itemArgs.photo!] : []);
+```
+
+> 3. Pada hasil akhir dari aplikasi belanja yang telah anda selesaikan, tambahkan atribut foto produk, stok, dan rating. Ubahlah tampilan menjadi GridView seperti di aplikasi marketplace pada umumnya.<br>
+
+![Output](img/13.png)
+
+> 4. Silakan implementasikan Hero widget pada aplikasi belanja
+
+![Output](img/002.GIF)
+
+> 5. Sesuaikan dan modifikasi tampilan sehingga menjadi aplikasi yang menarik. Selain itu, pecah widget menjadi kode yang lebih kecil. Tambahkan Nama dan NIM di footer aplikasi belanja Anda.
+
+> - Pecah Widget
+
+![Output](img/14.png)
+
+> - Modifikasi
+
+![Output](img/003.GIF)
+
+> 6. Selesaikan Praktikum 5: Navigasi dan Rute tersebut. Cobalah modifikasi menggunakan plugin go_router,
+
+> Plugin GoRouter
+
+```
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'pages/home_page.dart';
+import 'pages/item_page.dart';
+
+void main() => runApp(const MyApp());
+
+final GoRouter _router = GoRouter(
+  initialLocation: '/',
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => HomePage(),
+    ),
+    GoRoute(
+      path: '/item',
+      builder: (context, state) {
+        final item = state.extra as dynamic?;
+        return ItemPage(item: item);
+      },
+    ),
+  ],
+);
+```
