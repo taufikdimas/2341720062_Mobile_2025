@@ -564,7 +564,7 @@ class HomePage extends StatelessWidget {
 
 > Item pada ListView saat ini ketika ditekan masih belum memberikan aksi tertentu. Untuk menambahkan aksi pada ListView dapat digunakan widget InkWell atau GestureDetector. Perbedaan utamanya InkWell merupakan material widget yang memberikan efek ketika ditekan. Sedangkan GestureDetector bersifat umum dan bisa juga digunakan untuk gesture lain selain sentuhan. Pada praktikum ini akan digunakan widget InkWell.
 
-![Output](img/001.GIF)
+![Output](img/001.gif)
 
 ## **Tugas Pratikum 2**
 
@@ -597,7 +597,7 @@ Widget build(BuildContext context) {
 
 > 4. Silakan implementasikan Hero widget pada aplikasi belanja
 
-![Output](img/002.GIF)
+![Output](img/002.gif)
 
 > 5. Sesuaikan dan modifikasi tampilan sehingga menjadi aplikasi yang menarik. Selain itu, pecah widget menjadi kode yang lebih kecil. Tambahkan Nama dan NIM di footer aplikasi belanja Anda.
 
@@ -607,7 +607,7 @@ Widget build(BuildContext context) {
 
 > - Modifikasi
 
-![Output](img/003.GIF)
+![Output](img/003.gif)
 
 > 6. Selesaikan Praktikum 5: Navigasi dan Rute tersebut. Cobalah modifikasi menggunakan plugin go_router,
 
