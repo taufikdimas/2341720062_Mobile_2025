@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'filter_selector.dart';
 
 @immutable
 class PhotoFilterCarousel extends StatefulWidget {
-  const PhotoFilterCarousel({super.key});
+  const PhotoFilterCarousel({super.key, this.imagePath});
+
+  final String? imagePath;
 
   @override
   State<PhotoFilterCarousel> createState() => _PhotoFilterCarouselState();
@@ -47,9 +51,27 @@ class _PhotoFilterCarouselState extends State<PhotoFilterCarousel> {
     return ValueListenableBuilder(
       valueListenable: _filterColor,
       builder: (context, color, child) {
-        // Anda bisa ganti dengan foto Anda sendiri. Mengganti ke picsum
-        // agar contoh ini tidak bergantung pada file yang mungkin sudah
-        // dihapus dari docs.flutter.dev (sebelumnya menyebabkan 404).
+        // Jika path file lokal tersedia, gunakan Image.file.
+        if (widget.imagePath != null) {
+          try {
+            final file = File(widget.imagePath!);
+            if (file.existsSync()) {
+              return Image.file(
+                file,
+                color: color.withOpacity(0.5),
+                colorBlendMode: BlendMode.color,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(color: Colors.grey[900]);
+                },
+              );
+            }
+          } catch (_) {
+            // Silently fallthrough ke network placeholder
+          }
+        }
+
+        // Fallback ke network image saat file lokal tidak tersedia.
         return Image.network(
           'https://img.freepik.com/free-photo/closeup-scarlet-macaw-from-side-view-scarlet-macaw-closeup-head_488145-3540.jpg?semt=ais_hybrid&w=740&q=80',
           color: color.withOpacity(0.5),
@@ -65,6 +87,10 @@ class _PhotoFilterCarouselState extends State<PhotoFilterCarousel> {
   }
 
   Widget _buildFilterSelector() {
-    return FilterSelector(onFilterChanged: _onFilterChanged, filters: _filters);
+    return FilterSelector(
+      onFilterChanged: _onFilterChanged,
+      filters: _filters,
+      imagePath: widget.imagePath,
+    );
   }
 }

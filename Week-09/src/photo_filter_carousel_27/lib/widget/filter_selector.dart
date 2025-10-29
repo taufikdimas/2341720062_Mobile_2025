@@ -11,11 +11,13 @@ class FilterSelector extends StatefulWidget {
     required this.filters,
     required this.onFilterChanged,
     this.padding = const EdgeInsets.symmetric(vertical: 24),
+    this.imagePath,
   });
 
   final List<Color> filters;
   final void Function(Color selectedColor) onFilterChanged;
   final EdgeInsets padding;
+  final String? imagePath;
 
   @override
   State<FilterSelector> createState() => _FilterSelectorState();
@@ -129,6 +131,7 @@ class _FilterSelectorState extends State<FilterSelector> {
             FilterItem(
               onFilterSelected: () => _onFilterTapped(i),
               color: itemColor(i),
+              imagePath: widget.imagePath,
             ),
         ],
       ),
