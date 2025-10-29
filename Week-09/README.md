@@ -6,7 +6,7 @@
 
 1. File utama: `src/kamera_filter_27/lib/main.dart`.
 2. Alur kerja:
-   - `main()` memanggil `WidgetsFlutterBinding.ensureInitialized()` karena kita membutuhkan binding Flutter sebelum memanggil `availableCameras()` (fungsi async yang mengakses platform)
+   - `main()` memanggil `WidgetsFlutterBinding.ensureInitialized()` karena membutuhkan binding Flutter sebelum memanggil `availableCameras()` (fungsi async yang mengakses platform)
    - Mengambil daftar kamera dengan `availableCameras()` lalu memilih kamera pertama.
    - Menjalankan `MyApp(camera: firstCamera)` yang menampilkan `TakePictureScreen`.
 3. `TakePictureScreen` (stateful):
@@ -24,7 +24,7 @@ Hasil : <br>
 
 ## Praktikum 2 — Photo Filter Carousel
 
-1. File utama: `src/photo_filter_carousel_27/lib/widget/filter_carousel.dart` (juga ada versi serupa di `src/kamera_filter_27`).
+1. File utama: `src/photo_filter_carousel_27/lib/widget/filter_carousel.dart`
 2. Alur kerja:
    - Widget `PhotoFilterCarousel` menampilkan sebuah foto (bisa dari `Image.network` atau `Image.file`) dan sebuah daftar filter (warna) di bagian bawah.
    - Memanfaatkan `ValueNotifier<Color>` untuk menyimpan warna filter terpilih dan `ValueListenableBuilder` untuk merender ulang gambar dengan `color` dan `colorBlendMode`.
