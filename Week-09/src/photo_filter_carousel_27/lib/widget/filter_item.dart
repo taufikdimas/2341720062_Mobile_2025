@@ -19,7 +19,7 @@ class FilterItem extends StatelessWidget {
             child: Image.network(
               // Use a stable placeholder service. You can swap this for a
               // local asset later (recommended for production).
-              'https://picsum.photos/200',
+              'https://img.freepik.com/free-photo/closeup-scarlet-macaw-from-side-view-scarlet-macaw-closeup-head_488145-3540.jpg?semt=ais_hybrid&w=740&q=80',
               color: color.withOpacity(0.5),
               colorBlendMode: BlendMode.hardLight,
               fit: BoxFit.cover,

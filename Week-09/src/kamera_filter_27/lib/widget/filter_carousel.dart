@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'filter_selector.dart';
 
 @immutable
 class PhotoFilterCarousel extends StatefulWidget {
-  const PhotoFilterCarousel({super.key});
+  const PhotoFilterCarousel({super.key, required this.imagePath});
+
+  final String imagePath;
 
   @override
   State<PhotoFilterCarousel> createState() => _PhotoFilterCarouselState();
@@ -47,24 +51,28 @@ class _PhotoFilterCarouselState extends State<PhotoFilterCarousel> {
     return ValueListenableBuilder(
       valueListenable: _filterColor,
       builder: (context, color, child) {
-        // Anda bisa ganti dengan foto Anda sendiri. Mengganti ke picsum
-        // agar contoh ini tidak bergantung pada file yang mungkin sudah
-        // dihapus dari docs.flutter.dev (sebelumnya menyebabkan 404).
-        return Image.network(
-          'https://img.freepik.com/free-photo/closeup-scarlet-macaw-from-side-view-scarlet-macaw-closeup-head_488145-3540.jpg?semt=ais_hybrid&w=740&q=80',
-          color: color.withOpacity(0.5),
-          colorBlendMode: BlendMode.color,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            // Graceful fallback bila network image gagal dimuat.
-            return Container(color: Colors.grey[900]);
-          },
-        );
+        try {
+          return Image.file(
+            File(widget.imagePath),
+            color: color.withOpacity(0.5),
+            colorBlendMode: BlendMode.color,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(color: Colors.grey[900]);
+            },
+          );
+        } catch (_) {
+          return Container(color: Colors.grey[900]);
+        }
       },
     );
   }
 
   Widget _buildFilterSelector() {
-    return FilterSelector(onFilterChanged: _onFilterChanged, filters: _filters);
+    return FilterSelector(
+      onFilterChanged: _onFilterChanged,
+      filters: _filters,
+      imagePath: widget.imagePath,
+    );
   }
 }

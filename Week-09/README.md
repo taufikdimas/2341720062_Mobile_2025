@@ -12,7 +12,15 @@
 
 ## **Praktikum 2: Membuat photo filter carousel**
 
+> Hasil Program
+>
+> ![Output](img/02.webp)
+
 ## **Tugas Pratikum: Gabungan Pratikum 1 dan Pratikum 2**
+
+> Hasil Program
+>
+> ![Output](img/03.webp)
 
 ## **Pertanyaan**
 
