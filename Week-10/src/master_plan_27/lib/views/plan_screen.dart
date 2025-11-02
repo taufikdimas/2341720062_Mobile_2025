@@ -34,7 +34,7 @@ class _PlanScreenState extends State<PlanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Master Plan')),
+      appBar: AppBar(title: const Text('Master Plan Taufik Dimas')),
       body: ValueListenableBuilder<Plan>(
         valueListenable: PlanProvider.of(context),
         builder: (context, plan, child) {
@@ -73,7 +73,8 @@ class _PlanScreenState extends State<PlanScreen> {
           ? ScrollViewKeyboardDismissBehavior.onDrag
           : ScrollViewKeyboardDismissBehavior.manual,
       itemCount: plan.tasks.length,
-      itemBuilder: (context, index) => _buildTaskTile(plan.tasks[index], index, context),
+      itemBuilder: (context, index) =>
+          _buildTaskTile(plan.tasks[index], index, context),
     );
   }
 

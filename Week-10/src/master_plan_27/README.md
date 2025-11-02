@@ -269,3 +269,218 @@ Tambahkan GIF yang menunjukkan langkah di atas dan jelaskan tiap aksi singkat di
 ---
 
 ## Praktikum 2: Mengelola Data Layer dengan InheritedWidget dan InheritedNotifier
+
+# Langkah 1: Buat file plan_provider.dart
+
+Buat folder baru provider di dalam folder lib, lalu buat file baru dengan nama plan_provider.dart berisi kode seperti berikut.
+
+**Kode**
+
+```dart
+import 'package:flutter/material.dart';
+import '../models/data_layer.dart';
+
+class PlanProvider extends InheritedNotifier<ValueNotifier<Plan>> {
+  const PlanProvider({super.key, required Widget child, required
+   ValueNotifier<Plan> notifier})
+  : super(child: child, notifier: notifier);
+
+  static ValueNotifier<Plan> of(BuildContext context) {
+   return context.
+    dependOnInheritedWidgetOfExactType<PlanProvider>()!.notifier!;
+  }
+}
+```
+
+# Langkah 2: Edit main.dart
+
+Gantilah pada bagian atribut home dengan PlanProvider seperti berikut. Jangan lupa sesuaikan bagian impor jika dibutuhkan.
+
+```dart
+import 'package:flutter/material.dart';
+import './views/plan_screen.dart';
+import './provider/plan_provider.dart';
+import './models/data_layer.dart';
+
+void main() => runApp(MasterPlanApp());
+
+class MasterPlanApp extends StatelessWidget {
+  const MasterPlanApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(primarySwatch: Colors.purple),
+      home: PlanProvider(
+        notifier: ValueNotifier<Plan>(const Plan()),
+        child: const PlanScreen(),
+      ),
+    );
+  }
+}
+```
+
+# Langkah 3: Tambah method pada model plan.dart
+
+Tambahkan dua method di dalam model class Plan sepe
+rti kode berikut.
+
+```dart
+int get completedCount => tasks
+  .where((task) => task.complete)
+  .length;
+
+String get completenessMessage =>
+  '$completedCount out of ${tasks.length} tasks';
+```
+
+# Langkah 4: Pindah ke PlanScreen
+
+Edit PlanScreen agar menggunakan data dari PlanProvider. Hapus deklarasi variabel plan (ini akan membuat error). Kita akan perbaiki pada langkah 5 berikut ini.
+
+```dart
+Plan plan = const Plan(); // <-- HAPUS BARIS INI
+```
+
+# Langkah 5: Edit method \_buildAddTaskButton
+
+Tambahkan BuildContext sebagai parameter dan gunakan PlanProvider sebagai sumber datanya. Edit bagian kode seperti berikut.
+
+```dart
+Widget _buildAddTaskButton(BuildContext context) {
+  ValueNotifier<Plan> planNotifier = PlanProvider.of(context);
+  return FloatingActionButton(
+    child: const Icon(Icons.add),
+    onPressed: () {
+      Plan currentPlan = planNotifier.value;
+      planNotifier.value = Plan(
+        name: currentPlan.name,
+        tasks: List<Task>.from(currentPlan.tasks)..add(const Task()),
+      );
+    },
+  );
+}
+```
+
+# Langkah 6: Edit method \_buildTaskTile
+
+Tambahkan parameter BuildContext, gunakan PlanProvider sebagai sumber data. Ganti TextField menjadi TextFormField untuk membuat inisial data provider menjadi lebih mudah.
+
+```dart
+Widget _buildTaskTile(Task task, int index, BuildContext context) {
+  ValueNotifier<Plan> planNotifier = PlanProvider.of(context);
+  return ListTile(
+    leading: Checkbox(
+       value: task.complete,
+       onChanged: (selected) {
+         Plan currentPlan = planNotifier.value;
+         planNotifier.value = Plan(
+           name: currentPlan.name,
+           tasks: List<Task>.from(currentPlan.tasks)
+             ..[index] = Task(
+               description: task.description,
+               complete: selected ?? false,
+             ),
+         );
+       }),
+    title: TextFormField(
+      initialValue: task.description,
+      onChanged: (text) {
+        Plan currentPlan = planNotifier.value;
+        planNotifier.value = Plan(
+          name: currentPlan.name,
+          tasks: List<Task>.from(currentPlan.tasks)
+            ..[index] = Task(
+              description: text,
+              complete: task.complete,
+            ),
+        );
+      },
+    ),
+  );
+}
+```
+
+# Langkah 7: Edit \_buildList
+
+Sesuaikan parameter pada bagian \_buildTaskTile seperti kode berikut.
+
+```dart
+Widget _buildList(Plan plan) {
+   return ListView.builder(
+     controller: scrollController,
+     itemCount: plan.tasks.length,
+     itemBuilder: (context, index) =>
+        _buildTaskTile(plan.tasks[index], index, context),
+   );
+}
+```
+
+# Langkah 8: Tetap di class PlanScreen
+
+Edit method build sehingga bisa tampil progress pada bagian bawah (footer). Caranya, bungkus (wrap) \_buildList dengan widget Expanded dan masukkan ke dalam widget Column seperti kode pada Langkah 9.
+
+# Langkah 9: Tambah widget SafeArea
+
+Terakhir, tambahkan widget SafeArea dengan berisi completenessMessage pada akhir widget Column. Perhatikan kode berikut ini.
+
+```dart
+@override
+Widget build(BuildContext context) {
+   return Scaffold(
+     appBar: AppBar(title: const Text('Master Plan')),
+     body: ValueListenableBuilder<Plan>(
+       valueListenable: PlanProvider.of(context),
+       builder: (context, plan, child) {
+         return Column(
+           children: [
+             Expanded(child: _buildList(plan)),
+             SafeArea(child: Text(plan.completenessMessage))
+           ],
+         );
+       },
+     ),
+     floatingActionButton: _buildAddTaskButton(context),
+   );
+}
+```
+
+## Hasil Percobaan
+
+![Output](img/02.webp)
+
+Secara keseluruhan praktikum menunjukkan bagaimana memisahkan data layer dan UI menggunakan InheritedWidget/InheritedNotifier sehingga state dapat dibagikan dan dikelola dengan lebih
+terstruktur.
+
+## Jawaban Pertanyaan Praktikum 2
+
+1. Jelaskan mana yang dimaksud InheritedWidget pada langkah 1 tersebut! Mengapa yang digunakan InheritedNotifier?
+
+   - `InheritedWidget` adalah mekanisme bawaan Flutter untuk menyampaikan data ke subtree
+     widget melalui `BuildContext`. Widget di subtree bisa memanggil
+     `context.dependOnInheritedWidgetOfExactType<T>()` untuk membaca data dan menjadi dependent
+     sehingga akan rebuild saat `InheritedWidget` memberi notifikasi perubahan.
+   - `InheritedNotifier` adalah variasi dari `InheritedWidget` yang menggabungkannya dengan
+     `Listenable` (mis. `ValueNotifier` atau `ChangeNotifier`). Dengan `InheritedNotifier`, kita
+     dapat memberi notifikasi secara otomatis ketika `notifier` berubah (mis. `notifier.value = ...`).
+     Pada praktikum ini `InheritedNotifier<ValueNotifier<Plan>>` dipilih karena sederhana dan
+     cocok untuk satu value yang sering diganti. Ini mengurangi boilerplate dibanding membuat
+     custom notification logic.
+
+2. Jelaskan maksud dari method di langkah 3 pada praktikum tersebut! Mengapa dilakukan demikian?
+
+   - Pada langkah 3 kita menambahkan dua getter pada model `Plan`:
+
+     - `int get completedCount => tasks.where((task) => task.complete).length;`
+       -> Menghitung berapa banyak tugas yang sudah diberi tanda selesai.
+
+     - `String get completenessMessage => '$completedCount out of ${tasks.length} tasks';`
+       -> Menghasilkan pesan ringkasan yang mudah ditampilkan di UI (mis. footer) yang
+       memperlihatkan progres penyelesaian tugas.
+
+   - Alasan penambahan method ini:
+     - Memisahkan logika derivasi data dari UI (separation of concerns). UI cukup
+       memanggil `plan.completenessMessage` tanpa harus mengetahui bagaimana menghitungnya.
+     - Mempermudah pengujian unit (kita bisa menulis test untuk getter ini tanpa perlu
+       render widget).
+     - Membuat kode lebih bersih dan reusable.
