@@ -812,7 +812,7 @@ class _PlanCreatorScreenState extends State<PlanCreatorScreen> {
 
 ## Hasil Percobaan
 
-![Output](img/03.webp)
+![Output](img/003.webp)
 
 Penjelasan gambar di atas:
 
@@ -846,7 +846,7 @@ Rekomendasi singkat untuk pengembangan lebih lanjut:
 ## Pertanyaan Praktikum 3
 
 1. Berdasarkan Praktikum 3 yang telah Anda lakukan, jelaskan maksud dari gambar diagram berikut ini!<br>
-   ![Output](img/001.webp)
+   ![Output](img/001.png)
 
 Jawab :
 
