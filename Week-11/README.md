@@ -295,7 +295,7 @@ Future calculate() async {
 
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 5".
   Hasil:\
-   ![alt](./img/Praktikum3_week11.gif)
+  ![Output](img/04.webp)
 
 ## Langkah 6: Pindah ke onPressed()
 
@@ -321,7 +321,7 @@ getNumber()
 
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 6".
   Hasil:\
-   ![alt](./img/Praktikum3_week11.gif)
+   ![Output](img/04.webp)
 
 # Praktikum 4: Memanggil Future secara paralel
 
