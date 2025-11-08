@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:async/async.dart';
+// removed package:async; using Future.wait instead of FutureGroup
 
 void main() {
   runApp(const MyApp());
@@ -51,18 +51,14 @@ class _FuturePageState extends State<FuturePage> {
     }
   }
 
-  Future returnFG() async {
+  Future<int> returnFG() async {
     debugPrint('[returnFG] started');
-    FutureGroup<int> futureGroup = FutureGroup<int>();
-    futureGroup.add(returnOneAsync());
-    futureGroup.add(returnTwoAsync());
-    futureGroup.add(returnThreeAsync());
-    futureGroup.close();
-    final futures = await futureGroup.future;
-    int total = 0;
-    for (var num in futures) {
-      total += num;
-    }
+    final futures = await Future.wait<int>([
+      returnOneAsync(),
+      returnTwoAsync(),
+      returnThreeAsync(),
+    ]);
+    final total = futures.fold<int>(0, (prev, el) => prev + el);
     debugPrint('[returnFG] completed total=$total');
     return total;
   }
@@ -83,6 +79,11 @@ class _FuturePageState extends State<FuturePage> {
     return 3;
   }
 
+  Future<int> returnError() async {
+    await Future.delayed(const Duration(seconds: 2));
+    throw Exception('Something terrible happened!');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -101,41 +102,41 @@ class _FuturePageState extends State<FuturePage> {
               child: const Text('GO!'),
               onPressed: isCounting
                   ? null
-                  : () async {
-                      debugPrint('[button] pressed');
+                  : () {
                       if (mounted) {
                         setState(() {
                           isCounting = true;
                           result = '';
                         });
                       }
-                      try {
-                        final total = await returnFG();
-                        debugPrint('[button] returnFG returned $total');
-                        if (mounted) {
-                          setState(() {
-                            result = total.toString();
+                      returnError()
+                          .then((value) {
+                            if (mounted) {
+                              setState(() {
+                                result = 'Success';
+                              });
+                            }
+                          })
+                          .catchError((onError) {
+                            if (mounted) {
+                              setState(() {
+                                result = onError.toString();
+                              });
+                            }
+                          })
+                          .whenComplete(() {
+                            if (mounted) {
+                              setState(() {
+                                isCounting = false;
+                              });
+                            }
+                            print('Complete');
                           });
-                        }
-                      } catch (e) {
-                        debugPrint('[button] error: $e');
-                        if (mounted) {
-                          setState(() {
-                            result = 'Error: $e';
-                          });
-                        }
-                      } finally {
-                        if (mounted) {
-                          setState(() {
-                            isCounting = false;
-                          });
-                        }
-                      }
                     },
             ),
-            const SizedBox(height: 24),
-            Text(' $result', style: const TextStyle(fontSize: 24)),
-            const SizedBox(height: 24),
+            const SizedBox(height: 18),
+            Text(' $result', style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 18),
             if (isCounting) const CircularProgressIndicator(),
           ],
         ),

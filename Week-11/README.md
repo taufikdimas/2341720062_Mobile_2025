@@ -378,7 +378,7 @@ Anda akan melihat hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan
 
 Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 7".
 
-![alt](./img/Praktikum4_week11.gif)
+![Output](img/05.webp)
 
 ## Langkah 4: Ganti variabel futureGroup
 
@@ -450,7 +450,7 @@ Lakukan run dan klik tombol GO! maka akan menghasilkan seperti gambar berikut.
 
 Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 9".
 
-![alt](./img/Praktikum5_week11.gif)
+![Output](img/06.webp)
 
 ## Langkah 4: Tambah method handleError()
 
@@ -461,8 +461,6 @@ Tambahkan kode ini di dalam class \_FutureStatePage
 Panggil method handleError() tersebut di ElevatedButton, lalu run. Apa hasilnya? Jelaskan perbedaan kode langkah 1 dan 4!
 
 Jawab: Kedua pendekatan menghasilkan output yang sama - menampilkan pesan error "Exception: Something terrible happened!" dan mencetak 'Complete' di console. Namun handleError() dengan try-catch lebih mudah dibaca dan dipelihara.
-
-![alt](./img/Praktikum5_week11.gif)
 
 # Praktikum 6: Menggunakan Future dengan StatefulWidget
 
