@@ -69,8 +69,6 @@ class _FuturePageState extends State<FuturePage> {
               onPressed: isCounting
                   ? null
                   : () {
-                      // Call Completer example: getNumber() completes with 42 after 5s
-                      setState(() => isCounting = true);
                       getNumber()
                           .then((value) {
                             setState(() {
@@ -78,12 +76,7 @@ class _FuturePageState extends State<FuturePage> {
                             });
                           })
                           .catchError((e) {
-                            setState(() {
-                              result = 'Error: $e';
-                            });
-                          })
-                          .whenComplete(() {
-                            if (mounted) setState(() => isCounting = false);
+                            result = 'An error occurred';
                           });
                     },
             ),
