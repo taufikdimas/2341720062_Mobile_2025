@@ -101,6 +101,8 @@ Tambahkan method ini ke dalam class \_FuturePageState yang berguna untuk mengamb
     const path = '/books/v1/volumes/lFpwAAAAMAAJ';
     Uri url = Uri.https(authority, path);
     return http.get(url);
+
+
   }
   ```
 
@@ -140,8 +142,7 @@ ElevatedButton(
     Bagian ini bertugas sebagai penanganan kesalahan (error handling). Jika terjadi masalah saat proses getData() atau ketika eksekusi lanjutan di dalam then (misalnya pemanggilan substring gagal karena isi teks kosong atau jumlah karakternya kurang dari 450), blok catchError akan dijalankan. Dalam kondisi tersebut, variabel result akan diisi dengan pesan standar seperti 'An error occurred', lalu setState dipanggil agar tampilan aplikasi segera diperbarui sesuai kondisi error tersebut.
 
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 3".
-  - Hasil:\
-    ![hasil](./img/Praktikum1_week11.gif)
+  ![Output](img/02.webp)
 
 # Praktikum 2: Menggunakan await/async untuk menghindari callbacks
 
@@ -217,7 +218,7 @@ Akhirnya, run atau tekan F5 jika aplikasi belum running. Maka Anda akan melihat 
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 4".
 
   - Hasil:\
-    ![alt](./img/output_praktikum2.png)
+    ![Output](img/03.jpg)
 
 # Praktikum 3: Menggunakan Completer di Future
 
