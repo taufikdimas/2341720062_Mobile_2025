@@ -530,7 +530,7 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Current Location - Cakra')),
+      appBar: AppBar(title: const Text('Current Location - Taufik')),
       body: Center(child: Text(myPosition)),
     );
   }
@@ -625,7 +625,7 @@ Ketik kode berikut dan sesuaikan. Kode lama bisa Anda comment atau hapus.
 @override
 Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(title: Text('Current Location - Cakra')),
+    appBar: AppBar(title: Text('Current Location - Taufik')),
     body: Center(
       child: FutureBuilder<Position>(
         future: position,
@@ -653,7 +653,7 @@ Widget build(BuildContext context) {
   - Tidak ada perbedaan UI karena functionality-nya sama, hanya cara implementasinya yang lebih baik dengan FutureBuilder.
 
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 13".\
-  ![hasil](./img/Praktikum6_emulator%20HP_week11.gif)
+   ![Output](img/09.webp)
 
 - Seperti yang Anda lihat, menggunakan FutureBuilder lebih efisien, clean, dan reactive dengan Future bersama UI.
 
@@ -673,9 +673,6 @@ Tambahkan kode berikut untuk menangani ketika terjadi error. Kemudian hot restar
 - Apakah ada perbedaan UI dengan langkah sebelumnya? Mengapa demikian?
 
   - Tidak ada perbedaan UI visual, tapi sekarang aplikasi lebih siap menangani error dengan menampilkan pesan error jika terjadi masalah saat mengambil lokasi.
-
-- Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 14".\
-  ![hasil](./img/Praktikum6_emulator%20HP_week11.gif)
 
 # Praktikum 8: Navigation route dengan Future Function
 
@@ -708,7 +705,7 @@ class _NavigationFirstState extends State<NavigationFirst> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color,
-      appBar: AppBar(title: const Text('Navigation First Screen - Cakra')),
+      appBar: AppBar(title: const Text('Navigation First Screen - Taufik')),
       body: Center(
         child: ElevatedButton(
           child: const Text('Change Color'),
@@ -759,7 +756,7 @@ class _NavigationSecondState extends State<NavigationSecond> {
   Widget build(BuildContext context) {
     Color color;
     return Scaffold(
-      appBar: AppBar(title: const Text('Navigation Second Screen - Cakra')),
+      appBar: AppBar(title: const Text('Navigation Second Screen - Taufik')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -856,7 +853,7 @@ class _NavigationDialogScreenState extends State<NavigationDialogScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color,
-      appBar: AppBar(title: const Text('Navigation Dialog Screen - Cakra')),
+      appBar: AppBar(title: const Text('Navigation Dialog Screen - Taufik')),
       body: Center(
         child: ElevatedButton(
           child: const Text('Change Color'),
