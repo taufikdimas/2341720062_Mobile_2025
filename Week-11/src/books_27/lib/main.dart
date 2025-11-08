@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'geolocation.dart';
 import 'dart:async';
 // removed package:async; using Future.wait instead of FutureGroup
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const FuturePage(),
+  home: const LocationScreen(),
     );
   }
 }

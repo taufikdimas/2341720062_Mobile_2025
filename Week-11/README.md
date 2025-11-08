@@ -556,7 +556,7 @@ home: LocationScreen(),
 
 Run project Anda di device atau emulator (bukan browser), maka akan tampil seperti berikut ini.
 
-![alt](./img/Praktikum6_emulator%20HP_week11.gif)
+![Output](img/07.webp)
 
 ## Langkah 8: Tambahkan animasi loading
 
@@ -579,11 +579,7 @@ Tambahkan widget loading seperti kode berikut. Lalu hot restart, perhatikan peru
 - Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
 
   - Saya mendapatkan Koordinat GPS saat menjalankan pada browser Google Chrome:
-    ![chrome](./img/Praktikum6_chrome%20localhost_week11.gif)
-
-- Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 12".\
-  Hasil:\
-  ![hasil](./img/Praktikum6_emulator%20HP_week11.gif)
+    ![Output](img/08.webp)
 
 # Praktikum 7: Manajemen Future dengan FutureBuilder
 
