@@ -762,21 +762,21 @@ class _NavigationSecondState extends State<NavigationSecond> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
-              child: const Text('Purple'),
+              child: const Text('lavender'),
               onPressed: () {
                 color = Colors.purple.shade700;
                 Navigator.pop(context, color);
               },
             ),
             ElevatedButton(
-              child: const Text('Orange'),
+              child: const Text('Rose'),
               onPressed: () {
                 color = Colors.orange.shade700;
                 Navigator.pop(context, color);
               },
             ),
             ElevatedButton(
-              child: const Text('Teal'),
+              child: const Text('Peach'),
               onPressed: () {
                 color = Colors.teal.shade700;
                 Navigator.pop(context, color);
@@ -825,7 +825,7 @@ Lakukan run, jika terjadi error silakan diperbaiki.
   - Colors.Teal
 
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 16".\
-  ![hasil](./img/Praktikum8_week11.gif)
+  ![Output](img/10.webp)
 
 # Praktikum 9: Memanfaatkan async/await dengan Widget Dialog
 
@@ -954,4 +954,4 @@ Coba ganti warna background dengan widget dialog tersebut. Jika terjadi error, s
   - Colors.indigo
 
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 17".\
-   ![hasil](./img/Praktikum9_week11.gif)
+   ![Output](img/10.webp)

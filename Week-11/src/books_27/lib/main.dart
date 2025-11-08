@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'geolocation.dart';
+import 'navigation_dialog.dart';
 import 'dart:async';
 // removed package:async; using Future.wait instead of FutureGroup
 
 void main() {
+  // Ensure the app starts with the Navigation Dialog screen.
+  debugPrint('App start: NavigationDialogScreen as home');
   runApp(const MyApp());
 }
 
@@ -18,7 +20,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-  home: const LocationScreen(),
+  // Entry screen for the app.
+  home: const NavigationDialogScreen(),
     );
   }
 }
