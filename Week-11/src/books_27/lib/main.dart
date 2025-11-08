@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:async/async.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,6 +51,38 @@ class _FuturePageState extends State<FuturePage> {
     }
   }
 
+  Future returnFG() async {
+    debugPrint('[returnFG] started');
+    FutureGroup<int> futureGroup = FutureGroup<int>();
+    futureGroup.add(returnOneAsync());
+    futureGroup.add(returnTwoAsync());
+    futureGroup.add(returnThreeAsync());
+    futureGroup.close();
+    final futures = await futureGroup.future;
+    int total = 0;
+    for (var num in futures) {
+      total += num;
+    }
+    debugPrint('[returnFG] completed total=$total');
+    return total;
+  }
+
+  // Added missing async-returning helper methods
+  Future<int> returnOneAsync() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return 1;
+  }
+
+  Future<int> returnTwoAsync() async {
+    await Future.delayed(const Duration(seconds: 2));
+    return 2;
+  }
+
+  Future<int> returnThreeAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 3;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -68,16 +101,36 @@ class _FuturePageState extends State<FuturePage> {
               child: const Text('GO!'),
               onPressed: isCounting
                   ? null
-                  : () {
-                      getNumber()
-                          .then((value) {
-                            setState(() {
-                              result = value.toString();
-                            });
-                          })
-                          .catchError((e) {
-                            result = 'An error occurred';
+                  : () async {
+                      debugPrint('[button] pressed');
+                      if (mounted) {
+                        setState(() {
+                          isCounting = true;
+                          result = '';
+                        });
+                      }
+                      try {
+                        final total = await returnFG();
+                        debugPrint('[button] returnFG returned $total');
+                        if (mounted) {
+                          setState(() {
+                            result = total.toString();
                           });
+                        }
+                      } catch (e) {
+                        debugPrint('[button] error: $e');
+                        if (mounted) {
+                          setState(() {
+                            result = 'Error: $e';
+                          });
+                        }
+                      } finally {
+                        if (mounted) {
+                          setState(() {
+                            isCounting = false;
+                          });
+                        }
+                      }
                     },
             ),
             const SizedBox(height: 24),
