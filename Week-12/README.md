@@ -220,7 +220,7 @@ Lakukan running pada aplikasi Flutter Anda, maka akan terlihat berubah warna bac
 
 ## Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 
-![doksli](img/Praktikum1_Dart%20Stream.gif)
+![Praktikum 1](img/pratikum01.webp)
 
 ## Lakukan commit hasil jawaban Soal 4 dengan pesan "W12: Jawaban Soal 4"
 
@@ -380,7 +380,7 @@ Method `addRandomNumber()` berperan sebagai trigger untuk menginjeksikan data ke
 
 #### Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 
-![doksli](img/Praktikum2_Stream%20controllers%20dan%20sinks.gif)
+![Praktikum 2](img/pratikum02.webp)
 
 #### Lalu lakukan commit dengan pesan "W12: Jawaban Soal 6".
 
@@ -517,7 +517,7 @@ Ketiga langkah tersebut mengimplementasikan transformasi data stream menggunakan
 
 #### Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 
-![Stream Transformer](img/Praktikum3_Lanjutan%20State%20Management%20dengan%20Streams.gif)
+![Praktikum 3](img/pratikum03.webp)
 
 #### Lakukan commit dengan pesan "W12: Jawaban Soal 8".
 
@@ -650,13 +650,7 @@ Method ini ditambahkan dengan pengecekan kondisi `!numberStreamController.isClos
 
 ### Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 
-#### Hasil Subscribe stream Events
-
-![Subscribe Stream Events](img/Praktikum4_Subscribe%20ke%20stream%20events.gif)
-
-#### Hasil stop Subscribe stream Events
-
-![awwwasss setop](img/praktikum4_stop%20subscribe%20stream%20events.jpg)
+![Praktikum 4](img/pratikum04.webp)
 
 ### Lalu lakukan commit dengan pesan "W12: Jawaban Soal 9".
 
@@ -691,9 +685,7 @@ Ketik kode seperti berikut.
 
 ## Langkah 3: Run
 
-Lakukan run maka akan tampil error seperti gambar berikut.
-
-![Error Multiple Subscription](img/error%20praktikum%205.jpg)
+Lakukan run maka akan tampil error `Bad state: Stream has already been listened to` karena stream masih berupa single subscription.
 
 ## Soal 10
 
@@ -753,7 +745,7 @@ Dalam implementasi ini, `subscription` menerima data yang sudah ditransformasi (
 
 ### Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 
-![Broadcast Stream](img/Praktikum5_Multiple%20stream%20subscriptions.gif)
+![Praktikum 5](img/pratikum05.webp)
 
 ### Lakukan commit dengan pesan "W12: Jawaban Soal 11".
 
@@ -908,6 +900,6 @@ Method `getNumbers()` mengembalikan `Stream<int>` yang menghasilkan aliran data 
 
 ### Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 
-![StreamBuilder](img/Praktikum6_StreamBuilder.gif)
+![Praktikum 6](img/pratikum06.webp)
 
 ### Lalu lakukan commit dengan pesan "W12: Jawaban Soal 12".
