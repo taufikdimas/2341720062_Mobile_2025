@@ -57,7 +57,7 @@ Tambahkan nama panggilan Anda pada title app sebagai identitas hasil pekerjaan A
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Stream Cakra Wangsa',
+      title: 'Stream Taufik',
 ```
 
 Gantilah warna tema aplikasi sesuai kesukaan Anda.
@@ -203,7 +203,7 @@ Sesuaikan kode seperti berikut.
 ```dart
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Stream CakraWangsa'),
+        title: const Text('Stream Taufik'),
       ),
       body: Container(
         decoration: BoxDecoration(color: bgColor),
@@ -767,7 +767,7 @@ Setelah Anda menyelesaikan praktikum 5, Anda dapat melanjutkan praktikum 6 ini. 
 
 ## Langkah 1: Buat Project Baru
 
-Buatlah sebuah project flutter baru dengan nama streambuilder_cakrawangsa di folder codelab_week12
+Buatlah sebuah project flutter baru dengan nama streambuilder_Taufik di folder codelab_week12
 
 ## Langkah 2: Buat file baru stream.dart
 
