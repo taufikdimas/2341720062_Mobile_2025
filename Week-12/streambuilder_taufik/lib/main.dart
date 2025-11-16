@@ -117,17 +117,18 @@ class _StreamHomePageState extends State<StreamHomePage> {
           children: [
             Text(
               lastNumber.toString(),
-              style: Theme.of(context).textTheme.displayLarge ??
+              style:
+                  Theme.of(context).textTheme.displayLarge ??
                   const TextStyle(fontSize: 96),
             ),
             ElevatedButton(
               onPressed: addRandomNumber,
               child: const Text('New Random Number'),
             ),
-            ElevatedButton(
-              onPressed: stopStream,
-              child: const Text('Stop Subscription'),
-            ),
+            // ElevatedButton(
+            //   onPressed: stopStream,
+            //   child: const Text('Stop Subscription'),
+            // ),
           ],
         ),
       ),
