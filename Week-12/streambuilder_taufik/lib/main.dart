@@ -37,10 +37,12 @@ class StreamHomePage extends StatefulWidget {
 
 class _StreamHomePageState extends State<StreamHomePage> {
   int lastNumber = 0;
+  String values = '';
   late StreamController<int> numberStreamController;
   late NumberStream numberStream;
   late StreamTransformer<int, int> transformer;
   late StreamSubscription<int> subscription;
+  late StreamSubscription<int> subscription2;
 
   @override
   void initState() {
@@ -59,7 +61,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
       handleDone: (sink) => sink.close(),
     );
 
-    final stream = numberStreamController.stream;
+    final stream = numberStreamController.stream.asBroadcastStream();
     subscription = stream.transform(transformer).listen((event) {
       setState(() {
         lastNumber = event;
@@ -76,11 +78,18 @@ class _StreamHomePageState extends State<StreamHomePage> {
       // Log to console when the stream finishes as per the codelab instruction.
       print('OnDone was called');
     });
+
+    subscription2 = stream.listen((event) {
+      setState(() {
+        values += '$event - ';
+      });
+    });
   }
 
   @override
   void dispose() {
     subscription.cancel();
+    subscription2.cancel();
     if (!numberStreamController.isClosed) {
       numberStreamController.close();
     }
@@ -125,10 +134,11 @@ class _StreamHomePageState extends State<StreamHomePage> {
               onPressed: addRandomNumber,
               child: const Text('New Random Number'),
             ),
-            // ElevatedButton(
-            //   onPressed: stopStream,
-            //   child: const Text('Stop Subscription'),
-            // ),
+            ElevatedButton(
+              onPressed: stopStream,
+              child: const Text('Stop Subscription'),
+            ),
+            Text(values),
           ],
         ),
       ),
