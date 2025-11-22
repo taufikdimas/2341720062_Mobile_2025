@@ -603,3 +603,187 @@ flutter:
   assets:
     - assets/pizzalist.json
 ```
+
+---
+
+# Praktikum 2: Handle Kompatibilitas Data JSON
+
+Pada praktikum ini, kita akan menangani masalah kompatibilitas data JSON yang tidak konsisten, seperti tipe data yang berbeda atau nilai null.
+
+## Langkah 1: Simulasikan Error
+
+Mensimulasikan penggunaan data JSON yang tidak konsisten atau "rusak". Praktikum ini mengajarkan cara membuat kode yang lebih robust dalam menangani data yang tidak sempurna.
+
+## Langkah 2: Lihat Error Tipe Data String ke Int
+
+Jika ID pizza di JSON dikirim sebagai String (misalnya `"id": "1"`) sementara model Dart mengharapkan `int`, akan terjadi runtime error karena type mismatch.
+
+**Error yang mungkin terjadi:**
+
+```
+type 'String' is not a subtype of type 'int'
+```
+
+## Langkah 3: Terapkan tryParse dan Null Coalescing pada ID
+
+Menambahkan `int.tryParse()` dan null coalescing operator (`??`) pada field `id`:
+
+```dart
+factory Pizza.fromJson(Map<String, dynamic> json) {
+  return Pizza(
+    // Gunakan int.tryParse untuk handle String to Int conversion
+    id: int.tryParse(json['id']?.toString() ?? '0') ?? 0,
+    // ... field lainnya
+  );
+}
+```
+
+**Penjelasan:**
+
+- `json['id']?.toString()` - Convert nilai menjadi String (null-safe)
+- `?? '0'` - Jika null, gunakan '0' sebagai default
+- `int.tryParse()` - Coba parse String ke int, return null jika gagal
+- `?? 0` - Jika parsing gagal, gunakan 0 sebagai default
+
+## Langkah 4: Simulasikan Error Null pada String
+
+Jika ada field yang hilang (misalnya `imageUrl` tidak ada dalam JSON), akan terjadi error null reference.
+
+**Error yang mungkin terjadi:**
+
+```
+Null check operator used on a null value
+```
+
+## Langkah 5: Terapkan Null Coalescing pada String
+
+Menambahkan null coalescing operator (`??`) pada field String untuk memberikan nilai default:
+
+```dart
+pizzaName: json['pizzaName'] ?? 'No name',
+description: json['description'] ?? '',
+imageUrl: json['imageUrl'] ?? '',
+```
+
+## Langkah 6: Gunakan toString() untuk Field String
+
+Untuk memastikan semua nilai benar-benar String (bahkan jika dikirim sebagai tipe lain):
+
+```dart
+pizzaName: (json['pizzaName'] ?? 'No name').toString(),
+description: (json['description'] ?? '').toString(),
+imageUrl: (json['imageUrl'] ?? '').toString(),
+```
+
+## Langkah 7: Simulasikan Error Tipe Data String ke Double
+
+Jika field `price` dikirim sebagai String (misalnya `"price": "8.75"`), akan terjadi error saat mengonversi String ke double.
+
+**Error yang mungkin terjadi:**
+
+```
+type 'String' is not a subtype of type 'double'
+```
+
+## Langkah 8: Terapkan double.tryParse
+
+Menggunakan `double.tryParse()` dengan null coalescing untuk field `price`:
+
+```dart
+price: double.tryParse(json['price']?.toString() ?? '0') ?? 0,
+```
+
+## Langkah 9: Run dan Perhatikan Output Null
+
+Setelah implementasi perbaikan tipe data, aplikasi akan berjalan tanpa crash. Namun, mungkin menampilkan nilai default seperti "No name" atau "" untuk field yang missing.
+
+## Langkah 10: Tambahkan Operator Ternary untuk Output User-Friendly
+
+Jika diperlukan, kita bisa menambahkan pengecekan di UI untuk tampilan yang lebih ramah pengguna:
+
+```dart
+// Contoh di ListView.builder (opsional)
+title: Text(myPizzas[index].pizzaName.isNotEmpty
+    ? myPizzas[index].pizzaName
+    : 'No name'),
+```
+
+## Langkah 11: Run
+
+Menjalankan aplikasi. Data yang tidak konsisten sekarang ditangani dengan baik, tidak ada crash, dan UI tidak menampilkan nilai null yang membingungkan.
+
+---
+
+## Soal 4
+
+### Screenshot
+
+**Aplikasi berjalan dengan baik meskipun data JSON tidak konsisten:**
+
+![Screenshot Soal 4](./screenshots/soal4.png)
+
+### Penjelasan
+
+Pada Praktikum 2 ini, saya telah berhasil:
+
+1. **Menangani Type Casting untuk ID:**
+
+   - Menggunakan `int.tryParse()` untuk mengkonversi berbagai tipe data ke `int`
+   - Menambahkan null coalescing (`??`) untuk memberikan nilai default `0`
+
+2. **Menangani Null pada String:**
+
+   - Menambahkan null coalescing untuk `pizzaName`, `description`, dan `imageUrl`
+   - Memberikan nilai default yang sesuai ('No name' untuk nama, '' untuk string kosong)
+
+3. **Menangani Type Casting untuk Price:**
+
+   - Menggunakan `double.tryParse()` untuk mengkonversi String/int ke `double`
+   - Menambahkan default value `0` jika parsing gagal
+
+4. **Menggunakan toString():**
+   - Memastikan semua field String benar-benar bertipe String
+   - Mencegah error jika JSON mengirim tipe data yang tidak sesuai
+
+### Kode Lengkap Pizza Model (Praktikum 2)
+
+```dart
+factory Pizza.fromJson(Map<String, dynamic> json) {
+  return Pizza(
+    id: int.tryParse(json['id']?.toString() ?? '0') ?? 0,
+    pizzaName: (json['pizzaName'] ?? 'No name').toString(),
+    description: (json['description'] ?? '').toString(),
+    price: double.tryParse(json['price']?.toString() ?? '0') ?? 0,
+    imageUrl: (json['imageUrl'] ?? '').toString(),
+  );
+}
+```
+
+**Manfaat:**
+
+- ✅ Aplikasi tidak crash meskipun data JSON rusak atau tidak konsisten
+- ✅ Tipe data yang berbeda dapat di-handle dengan baik
+- ✅ Nilai null ditangani dengan memberikan default value
+- ✅ Kode lebih robust dan production-ready
+
+---
+
+## Kesimpulan Praktikum 1 & 2
+
+Dari kedua praktikum ini, kita telah mempelajari:
+
+### Praktikum 1:
+
+- Deserialization JSON ke objek Dart
+- Serialization objek Dart ke JSON
+- Penggunaan `factory constructor` dan `toJson()` method
+- Bekerja dengan assets dan `rootBundle`
+
+### Praktikum 2:
+
+- Menangani data JSON yang tidak konsisten
+- Type casting dengan `tryParse()` methods
+- Null safety dengan null coalescing operator (`??`)
+- Defensive programming untuk production-ready code
+
+Kombinasi kedua praktikum ini memberikan fondasi yang kuat untuk bekerja dengan API dan data persistence di aplikasi Flutter yang real-world.
