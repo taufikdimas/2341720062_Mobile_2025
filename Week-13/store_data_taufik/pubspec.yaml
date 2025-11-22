@@ -40,6 +40,7 @@ dependencies:
 
   # Praktikum 5: Path provider untuk akses filesystem
   path_provider: ^2.1.5
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:

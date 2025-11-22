@@ -5,6 +5,7 @@
 // PRAKTIKUM 4: SharedPreferences - Menyimpan data sederhana
 // PRAKTIKUM 5: Akses filesystem dengan path_provider
 // PRAKTIKUM 6: Akses filesystem dengan direktori
+// PRAKTIKUM 7: Menyimpan data dengan enkripsi/dekripsi
 // ========================
 
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 // Praktikum 6 - Langkah 1: Import dart:io
 import 'dart:io';
+// Praktikum 7 - Langkah 2: Import flutter_secure_storage
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,6 +64,13 @@ class _MyHomePageState extends State<MyHomePage> {
   // Praktikum 6 - Langkah 2: Variabel untuk file dan text
   late File myFile;
   String fileText = '';
+
+  // Praktikum 7 - Langkah 3: TextEditingController dan variabel password
+  final pwdController = TextEditingController();
+  String myPass = '';
+
+  // Praktikum 7 - Langkah 4: Inisialisasi FlutterSecureStorage
+  final storage = const FlutterSecureStorage();
 
   // Praktikum 1: Method untuk membaca dan decode JSON file
   // Praktikum 2: Sudah dapat handle data JSON yang tidak konsisten
@@ -140,6 +150,19 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // Praktikum 7 - Langkah 5: Method untuk menulis ke secure storage
+  Future writeToSecureStorage() async {
+    await storage.write(key: 'myPass', value: pwdController.text);
+  }
+
+  // Praktikum 7 - Langkah 6: Method untuk membaca dari secure storage
+  Future readFromSecureStorage() async {
+    String secret = await storage.read(key: 'myPass') ?? '';
+    setState(() {
+      myPass = secret;
+    });
+  }
+
   // Praktikum 6 - Langkah 4: Initialize state, inisialisasi file dan tulis data
   @override
   void initState() {
@@ -173,17 +196,48 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      // Praktikum 6 - Langkah 6: Tampilan dengan tombol baca file
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ElevatedButton(
-            onPressed: () => readFile(),
-            child: const Text('Read File'),
+      // Praktikum 7 - Langkah 7 & 8: Tampilan dengan TextField dan tombol Save/Read
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: pwdController,
+                decoration: const InputDecoration(labelText: 'Enter Password'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  writeToSecureStorage();
+                },
+                child: const Text('Save Value'),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  readFromSecureStorage();
+                },
+                child: const Text('Read Value'),
+              ),
+              const SizedBox(height: 20),
+              Text(myPass),
+            ],
           ),
-          Text(fileText),
-        ],
+        ),
       ),
+
+      // Praktikum 6 - Langkah 6: Tampilan dengan tombol baca file (di-comment untuk Praktikum 7)
+      // body: Column(
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   children: [
+      //     ElevatedButton(
+      //       onPressed: () => readFile(),
+      //       child: const Text('Read File'),
+      //     ),
+      //     Text(fileText),
+      //   ],
+      // ),
 
       // Praktikum 5 - Langkah 6: Tampilan path direktori (di-comment untuk Praktikum 6)
       // body: Column(
