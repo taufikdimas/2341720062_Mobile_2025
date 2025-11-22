@@ -3,6 +3,7 @@
 // PRAKTIKUM 2: Handle kompatibilitas data JSON
 // PRAKTIKUM 3: Menangani error JSON dengan konstanta
 // PRAKTIKUM 4: SharedPreferences - Menyimpan data sederhana
+// PRAKTIKUM 5: Akses filesystem dengan path_provider
 // ========================
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'dart:convert';
 import 'model/pizza.dart';
 // Praktikum 4 - Langkah 3: Import shared_preferences
 import 'package:shared_preferences/shared_preferences.dart';
+// Praktikum 5 - Langkah 2: Import path_provider
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,6 +50,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Praktikum 4 - Langkah 4: Variabel untuk menyimpan counter app
   int appCounter = 0;
+
+  // Praktikum 5 - Langkah 3: Variabel untuk menyimpan path direktori
+  String documentsPath = 'Unknown';
+  String tempPath = 'Unknown';
 
   // Praktikum 1: Method untuk membaca dan decode JSON file
   // Praktikum 2: Sudah dapat handle data JSON yang tidak konsisten
@@ -93,22 +100,34 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  // Praktikum 1: Initialize state saat widget pertama kali dibuat
+  // Praktikum 5 - Langkah 4: Method untuk mendapatkan path direktori
+  Future getPaths() async {
+    final documentsDir = await getApplicationDocumentsDirectory();
+    final tempDir = await getTemporaryDirectory();
+    setState(() {
+      documentsPath = documentsDir.path;
+      tempPath = tempDir.path;
+    });
+  }
+
+  // Praktikum 5 - Langkah 5: Initialize state dan panggil getPaths
   @override
   void initState() {
     super.initState();
-    // Praktikum 1: Membaca file JSON dan update state
-    readJsonFile().then((pizzas) {
-      setState(() {
-        myPizzas = pizzas;
-      });
-      // Praktikum 1: Convert kembali ke JSON dan print ke console
-      String json = convertToJSON(myPizzas);
-      print(json);
-    });
+    getPaths();
 
-    // Praktikum 4 - Langkah 10: Panggil readAndWritePreference saat app dibuka
-    readAndWritePreference();
+    // Praktikum 1: Membaca file JSON dan update state (di-comment untuk Praktikum 5)
+    // readJsonFile().then((pizzas) {
+    //   setState(() {
+    //     myPizzas = pizzas;
+    //   });
+    //   // Praktikum 1: Convert kembali ke JSON dan print ke console
+    //   String json = convertToJSON(myPizzas);
+    //   print(json);
+    // });
+
+    // Praktikum 4 - Langkah 10: Panggil readAndWritePreference (di-comment untuk Praktikum 5)
+    // readAndWritePreference();
   }
 
   @override
@@ -118,23 +137,31 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      // Praktikum 4 - Langkah 11: Tampilan counter dan tombol reset
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              'You have opened the app $appCounter times.',
-              style: const TextStyle(fontSize: 20),
-            ),
-            // Langkah 14: Tombol reset yang memanggil deletePreference
-            ElevatedButton(
-              onPressed: deletePreference,
-              child: const Text('Reset counter'),
-            ),
-          ],
-        ),
+      // Praktikum 5 - Langkah 6: Tampilan path direktori
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text('Doc path: $documentsPath'),
+          Text('Temp path $tempPath'),
+        ],
       ),
+
+      // Praktikum 4: Counter dan tombol reset (di-comment untuk Praktikum 5)
+      // body: Center(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //     children: [
+      //       Text(
+      //         'You have opened the app $appCounter times.',
+      //         style: const TextStyle(fontSize: 20),
+      //       ),
+      //       ElevatedButton(
+      //         onPressed: deletePreference,
+      //         child: const Text('Reset counter'),
+      //       ),
+      //     ],
+      //   ),
+      // ),
 
       // Praktikum 1-3: ListView pizza (di-comment untuk Praktikum 4)
       // body: ListView.builder(

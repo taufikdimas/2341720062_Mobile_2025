@@ -38,6 +38,9 @@ dependencies:
   # Praktikum 4: SharedPreferences untuk menyimpan data sederhana
   shared_preferences: ^2.2.2
 
+  # Praktikum 5: Path provider untuk akses filesystem
+  path_provider: ^2.1.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
