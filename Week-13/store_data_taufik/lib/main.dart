@@ -4,6 +4,7 @@
 // PRAKTIKUM 3: Menangani error JSON dengan konstanta
 // PRAKTIKUM 4: SharedPreferences - Menyimpan data sederhana
 // PRAKTIKUM 5: Akses filesystem dengan path_provider
+// PRAKTIKUM 6: Akses filesystem dengan direktori
 // ========================
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,8 @@ import 'model/pizza.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // Praktikum 5 - Langkah 2: Import path_provider
 import 'package:path_provider/path_provider.dart';
+// Praktikum 6 - Langkah 1: Import dart:io
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -54,6 +57,10 @@ class _MyHomePageState extends State<MyHomePage> {
   // Praktikum 5 - Langkah 3: Variabel untuk menyimpan path direktori
   String documentsPath = 'Unknown';
   String tempPath = 'Unknown';
+
+  // Praktikum 6 - Langkah 2: Variabel untuk file dan text
+  late File myFile;
+  String fileText = '';
 
   // Praktikum 1: Method untuk membaca dan decode JSON file
   // Praktikum 2: Sudah dapat handle data JSON yang tidak konsisten
@@ -110,11 +117,40 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  // Praktikum 5 - Langkah 5: Initialize state dan panggil getPaths
+  // Praktikum 6 - Langkah 3: Method untuk menulis file
+  Future<bool> writeFile() async {
+    try {
+      await myFile.writeAsString('Taufik Dimas Edystara 2341720062');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Praktikum 6 - Langkah 5: Method untuk membaca file
+  Future<bool> readFile() async {
+    try {
+      String fileContent = await myFile.readAsString();
+      setState(() {
+        fileText = fileContent;
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Praktikum 6 - Langkah 4: Initialize state, inisialisasi file dan tulis data
   @override
   void initState() {
     super.initState();
-    getPaths();
+    getPaths().then((_) {
+      myFile = File('$documentsPath/pizzas.txt');
+      writeFile();
+    });
+
+    // Praktikum 5 - Langkah 5: Panggil getPaths (di-comment untuk Praktikum 6)
+    // getPaths();
 
     // Praktikum 1: Membaca file JSON dan update state (di-comment untuk Praktikum 5)
     // readJsonFile().then((pizzas) {
@@ -137,14 +173,26 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      // Praktikum 5 - Langkah 6: Tampilan path direktori
+      // Praktikum 6 - Langkah 6: Tampilan dengan tombol baca file
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text('Doc path: $documentsPath'),
-          Text('Temp path $tempPath'),
+          ElevatedButton(
+            onPressed: () => readFile(),
+            child: const Text('Read File'),
+          ),
+          Text(fileText),
         ],
       ),
+
+      // Praktikum 5 - Langkah 6: Tampilan path direktori (di-comment untuk Praktikum 6)
+      // body: Column(
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   children: [
+      //     Text('Doc path: $documentsPath'),
+      //     Text('Temp path $tempPath'),
+      //   ],
+      // ),
 
       // Praktikum 4: Counter dan tombol reset (di-comment untuk Praktikum 5)
       // body: Center(
