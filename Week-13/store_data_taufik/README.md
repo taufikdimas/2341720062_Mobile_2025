@@ -787,3 +787,201 @@ Dari kedua praktikum ini, kita telah mempelajari:
 - Defensive programming untuk production-ready code
 
 Kombinasi kedua praktikum ini memberikan fondasi yang kuat untuk bekerja dengan API dan data persistence di aplikasi Flutter yang real-world.
+
+---
+
+# Praktikum 3: Menangani Error JSON
+
+Pada praktikum ini, kita akan fokus pada **catching common JSON errors** dengan mengganti string literals (nama kunci JSON) menjadi konstanta untuk menghindari error yang sulit di-debug (kesalahan pengetikan/typo).
+
+## Langkah 1: Buka `pizza.dart` dan Buat Konstanta
+
+Membuat konstanta untuk setiap kunci JSON di bagian atas file `pizza.dart`, di luar class Pizza.
+
+```dart
+// Praktikum 3 - Langkah 1: Deklarasi konstanta untuk kunci JSON
+const String keyId = 'id';
+const String keyName = 'pizzaName';
+const String keyDescription = 'description';
+const String keyPrice = 'price';
+const String keyImage = 'imageUrl';
+```
+
+**Tujuan:**
+
+- Menghindari typo saat menulis nama kunci JSON
+- Jika ada perubahan struktur JSON, cukup ubah di satu tempat
+- Lebih mudah di-maintain dan di-refactor
+
+## Langkah 2: Perbarui fromJson() menggunakan Konstanta
+
+Mengganti semua string literal kunci JSON (misalnya `'id'`) dengan konstanta yang sesuai (`keyId`).
+
+**Sebelum (Praktikum 1 & 2):**
+
+```dart
+factory Pizza.fromJson(Map<String, dynamic> json) {
+  return Pizza(
+    id: json['id'] is int ? json['id'] : int.parse(json['id'].toString()),
+    pizzaName: json['pizzaName']?.toString() ?? 'No name',
+    description: json['description']?.toString() ?? '',
+    // ... dst
+  );
+}
+```
+
+**Sesudah (Praktikum 3):**
+
+```dart
+factory Pizza.fromJson(Map<String, dynamic> json) {
+  return Pizza(
+    id: json[keyId] is int ? json[keyId] : int.parse(json[keyId].toString()),
+    pizzaName: json[keyName]?.toString() ?? 'No name',
+    description: json[keyDescription]?.toString() ?? '',
+    price: json[keyPrice] is double
+        ? json[keyPrice]
+        : double.parse(json[keyPrice].toString()),
+    imageUrl: json[keyImage]?.toString() ?? '',
+  );
+}
+```
+
+## Langkah 3: Perbarui toJson() menggunakan Konstanta
+
+Memperbarui method `toJson()` agar menggunakan konstanta yang sama.
+
+**Sebelum:**
+
+```dart
+Map<String, dynamic> toJson() {
+  return {
+    'id': id,
+    'pizzaName': pizzaName,
+    'description': description,
+    'price': price,
+    'imageUrl': imageUrl,
+  };
+}
+```
+
+**Sesudah:**
+
+```dart
+Map<String, dynamic> toJson() {
+  return {
+    keyId: id,
+    keyName: pizzaName,
+    keyDescription: description,
+    keyPrice: price,
+    keyImage: imageUrl,
+  };
+}
+```
+
+## Langkah 4: Run
+
+Menjalankan aplikasi. Tidak akan ada perubahan visual, tetapi kode kini lebih safe dan maintainable.
+
+---
+
+## Soal 5
+
+### Screenshot
+
+**Aplikasi berjalan normal dengan konstanta JSON keys:**
+
+![Screenshot Soal 5](./screenshots/soal5.png)
+
+### Penjelasan: Maksud Kode Lebih Safe dan Maintainable
+
+Dengan menggunakan konstanta untuk kunci JSON, kode menjadi **lebih safe dan maintainable** karena:
+
+#### 1. **Menghindari Typo (Type Safety)**
+
+- ❌ **Sebelum:** `json['pizzaName']` vs `json['pizaName']` (typo!)
+- ✅ **Sesudah:** `json[keyName]` - jika salah ketik, IDE akan error
+- Compiler akan mendeteksi kesalahan saat compile time, bukan runtime
+
+#### 2. **Single Source of Truth**
+
+- Jika struktur JSON berubah dari `"pizzaName"` menjadi `"name"`:
+  - ❌ **Sebelum:** Harus cari dan ganti di **semua tempat** (fromJson, toJson, dll)
+  - ✅ **Sesudah:** Cukup ubah **satu konstanta** saja:
+    ```dart
+    const String keyName = 'name'; // cukup ubah di sini
+    ```
+
+#### 3. **Autocomplete & Refactoring**
+
+- IDE dapat memberikan autocomplete untuk konstanta
+- Fitur "Find Usages" dan "Rename" bekerja dengan baik
+- Mudah melacak penggunaan kunci tertentu di seluruh kode
+
+#### 4. **Dokumentasi yang Lebih Baik**
+
+- Konstanta dapat diberi komentar untuk menjelaskan maksudnya
+- Lebih mudah dipahami oleh developer lain
+
+#### 5. **Konsistensi**
+
+- Memastikan kunci yang sama digunakan di `fromJson()` dan `toJson()`
+- Mengurangi kemungkinan ketidakkonsistenan data
+
+### Contoh Masalah yang Dihindari
+
+**Tanpa konstanta:**
+
+```dart
+// Di fromJson
+id: json['id']  // ✅ benar
+
+// Di toJson
+'idd': id  // ❌ typo! runtime error yang susah di-debug
+```
+
+**Dengan konstanta:**
+
+```dart
+// Di fromJson
+id: json[keyId]  // ✅
+
+// Di toJson
+keyId: id  // ✅ jika typo, compile error langsung terdeteksi
+```
+
+### Manfaat di Production
+
+- ✅ **Lebih mudah di-maintain** saat project berkembang
+- ✅ **Mengurangi bug** akibat typo
+- ✅ **Mempercepat development** dengan autocomplete
+- ✅ **Memudahkan refactoring** saat API berubah
+- ✅ **Code review lebih mudah** karena lebih konsisten
+
+---
+
+## Kesimpulan Praktikum 1, 2 & 3
+
+Dari ketiga praktikum ini, kita telah mempelajari:
+
+### Praktikum 1:
+
+- Deserialization JSON ke objek Dart
+- Serialization objek Dart ke JSON
+- Penggunaan `factory constructor` dan `toJson()` method
+- Bekerja dengan assets dan `rootBundle`
+
+### Praktikum 2:
+
+- Menangani data JSON yang tidak konsisten
+- Type casting dengan `tryParse()` methods
+- Null safety dengan null coalescing operator (`??`)
+- Defensive programming untuk production-ready code
+
+### Praktikum 3:
+
+- Menggunakan konstanta untuk kunci JSON
+- Menghindari error typo pada string literals
+- Meningkatkan maintainability dan code quality
+- Single source of truth untuk struktur JSON
+
+**Best Practice:** Kombinasi ketiga praktikum ini memberikan fondasi yang kuat untuk bekerja dengan API dan data persistence di aplikasi Flutter production-ready yang robust, safe, dan mudah di-maintain.

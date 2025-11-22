@@ -1,6 +1,7 @@
 // ========================
 // PRAKTIKUM 1: Konversi Dart model ke JSON
 // PRAKTIKUM 2: Handle kompatibilitas data JSON
+// PRAKTIKUM 3: Menangani error JSON dengan konstanta
 // ========================
 
 import 'package:flutter/material.dart';
