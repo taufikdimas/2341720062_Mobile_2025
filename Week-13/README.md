@@ -1,12 +1,12 @@
-# Praktikum 1: Dart Streams
+# Praktikum 1: Konversi Dart model ke JSON
 
 Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda (ketik di README.md) pada setiap soal yang ada di beberapa langkah praktikum ini.
 
-# Langkah 1: Buat Project Baru
+### Langkah 1: Buat Project Baru
 
-Buatlah sebuah project flutter baru dengan nama stream_nama (beri nama panggilan Anda) di folder week-12/src/ repository GitHub Anda.
+Buatlah sebuah project flutter baru dengan nama store_data_nama (beri nama panggilan Anda) di folder week-13/src/ repository GitHub Anda.
 
-# Langkah 2: Buka file main.dart
+### Langkah 2: Buka file main.dart
 
 Ketiklah kode seperti berikut ini.
 
@@ -23,883 +23,1056 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Stream',
+      title: 'Flutter JSON Demo - taufik',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const StreamHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
 
-class StreamHomePage extends StatefulWidget {
-  const StreamHomePage({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
 
   @override
-  State<StreamHomePage> createState() => _StreamHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
-```
 
-```dart
-class _StreamHomePageState extends State<StreamHomePage> {
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
-  }
-}
-```
-
-## Soal 1
-
-Tambahkan nama panggilan Anda pada title app sebagai identitas hasil pekerjaan Anda.
-
-```dart
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Stream Taufik',
-```
-
-Gantilah warna tema aplikasi sesuai kesukaan Anda.
-Lakukan commit hasil jawaban Soal 1 dengan pesan "W12: Jawaban Soal 1"
-
-```dart
-primarySwatch: Colors.blue,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          secondary: Colors.pink,
-          tertiary: Colors.orange,
-```
-
-# Langkah 3: Buat file baru stream.dart
-
-Buat file baru di folder lib project Anda. Lalu isi dengan kode berikut.
-
-```dart
-import 'package:flutter/material.dart';
-
-class ColorStream {
-
-}
-```
-
-# Langkah 4: Tambah variabel colors
-
-Tambahkan variabel di dalam class ColorStream seperti berikut.
-
-```dart
-  final List<Color> colors = [
-    Colors.blueGrey,
-    Colors.amber,
-    Colors.deepPurple,
-    Colors.lightBlue,
-    Colors.teal,
-  ];
-```
-
-## Soal 2
-
-### Tambahkan 5 warna lainnya sesuai keinginan Anda pada variabel colors tersebut.
-
-```dart
-  final List<Color> colors = [
-    Colors.blueGrey,
-    Colors.amber,
-    Colors.deepPurple,
-    Colors.lightBlue,
-    Colors.teal,
-    // Soal 2: Menambahkan warna sesuai keinginan
-    Colors.pink,
-    Colors.orange,
-    Colors.green,
-    Colors.red,
-    Colors.indigo,
-  ];
-```
-
-### Lakukan commit hasil jawaban Soal 2 dengan pesan "W12: Jawaban Soal 2"
-
-# Langkah 5: Tambah method getColors()
-
-Di dalam class ColorStream ketik method seperti kode berikut. Perhatikan tanda bintang di akhir keyword async\* (ini digunakan untuk melakukan Stream data)
-
-```dart
-Stream<Color> getColors() async* {
-}
-```
-
-# Langkah 6: Tambah perintah yield\*
-
-Tambahkan kode berikut ini.
-
-```dart
-yield* Stream.periodic(
-  const Duration(seconds: 1), (int t) {
-    int index = t % colors.length;
-    return colors[index];
-});
-```
-
-## Soal 3
-
-### Jelaskan fungsi keyword yield\* pada kode tersebut!
-
-Jawab: yield* digunakan untuk mengalirkan (delegate) seluruh nilai dari Stream lain ke dalam Stream yang sedang dibuat. Berbeda dengan yield yang mengirimkan satu nilai, yield* mengirimkan semua nilai dari Stream secara berurutan.
-
-### Apa maksud isi perintah kode tersebut?
-
-Jawab: konstruksi ini membentuk stream yang memancarkan data setiap satu detik. Parameter t berperan sebagai penghitung yang bertambah secara berurutan, lalu diproyeksikan ke dalam rentang indeks list colors melalui operasi modulo agar tetap valid. Dari hasil tersebut, warna dipilih sesuai indeks dan dikirimkan ke stream. Dengan mekanisme siklik ini, warna akan berganti tiap detik dan kembali ke awal setelah mencapai elemen terakhir, sehingga tercipta aliran data yang berulang tanpa henti.
-
-### Lakukan commit hasil jawaban Soal 3 dengan pesan "W12: Jawaban Soal 3"
-
-# Langkah 7: Buka main.dart
-
-Ketik kode impor file ini pada file main.dart
-
-```dart
-import 'stream.dart';
-```
-
-# Langkah 8: Tambah variabel
-
-Ketik dua properti ini di dalam class \_StreamHomePageState
-
-```dart
-  Color bgColor = Colors.blueGrey;
-  late ColorStream colorStream;
-```
-
-# Langkah 9: Tambah method changeColor()
-
-Tetap di file main, Ketik kode seperti berikut
-
-```dart
-  void changeColor() async {
-    await for (var eventColor in colorStream.getColors()) {
-      setState(() {
-        bgColor = eventColor;
-      });
-    }
-  }
-```
-
-# Langkah 10: Lakukan override initState()
-
-Ketika kode seperti berikut:
-
-```dart
-  @override
-  void initState() {
-    super.initState();
-    colorStream = ColorStream();
-    changeColor();
-  }
-```
-
-# Langkah 11: Ubah isi Scaffold()
-
-Sesuaikan kode seperti berikut.
-
-```dart
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Stream Taufik'),
+        title: const Text('Flutter JSON Demo - taufik'),
       ),
-      body: Container(
-        decoration: BoxDecoration(color: bgColor),
+      body: Container(),
+    );
+  }
+}
+```
+
+### Soal 1
+
+1. Tambahkan nama panggilan Anda pada title app sebagai identitas hasil pekerjaan Anda.
+
+```dart
+@override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter JSON Demo - taufik',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
+      home: const MyHomePage(),
     );
   }
 ```
 
-# Langkah 12: Run
-
-Lakukan running pada aplikasi Flutter Anda, maka akan terlihat berubah warna background setiap detik.
-
-## Soal 4
-
-## Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
-
-![Praktikum 1](img/pratikum01.webp)
-
-## Lakukan commit hasil jawaban Soal 4 dengan pesan "W12: Jawaban Soal 4"
-
-# Langkah 13: Ganti isi method changeColor()
-
-Anda boleh comment atau hapus kode sebelumnya, lalu ketika kode seperti berikut.
-
-## Soal 5
-
-### Jelaskan perbedaan menggunakan listen dan await for (langkah 9) !
-
-Perbedaan antara `await for` dan `listen()` terletak pada mekanisme eksekusi dan pengelolaan aliran data stream. Konstruksi `await for` menerapkan pendekatan sinkron-blocking yang mengiterasi setiap event secara berurutan dan menghentikan eksekusi kode selanjutnya hingga stream berakhir atau dibatalkan, sehingga cocok untuk pemrosesan data yang memerlukan urutan ketat. Sebaliknya, metode `listen()` mengimplementasikan pola asinkron-non-blocking dengan melakukan subscription terhadap stream dan langsung melanjutkan eksekusi kode berikutnya tanpa menunggu, memberikan fleksibilitas lebih tinggi melalui kemampuan penanganan error, callback completion, serta kontrol subscription yang dapat dibatalkan kapan saja, menjadikannya lebih optimal untuk aplikasi Flutter yang memerlukan responsivitas antarmuka pengguna.
-
-### Lakukan commit hasil jawaban Soal 5 dengan pesan "W12: Jawaban Soal 5"
-
-# Praktikum 2: Stream controllers dan sinks
-
-StreamControllers akan membuat jembatan antara Stream dan Sink. Stream berisi data secara sekuensial yang dapat diterima oleh subscriber manapun, sedangkan Sink digunakan untuk mengisi (injeksi) data.
-
-Secara sederhana, StreamControllers merupakan stream management. Ia akan otomatis membuat stream dan sink serta beberapa method untuk melakukan kontrol terhadap event dan fitur-fitur yang ada di dalamnya.
-
-Anda dapat membayangkan stream sebagai pipa air yang mengalir searah, dari salah satu ujung Anda dapat mengisi data dan dari ujung lain data itu keluar. Anda dapat melihat konsep stream pada gambar diagram berikut ini.
-
-## Langkah 1: Buka file stream.dart
-
-Lakukan impor dengan mengetik kode ini.
+2. Gantilah warna tema aplikasi sesuai kesukaan Anda.
 
 ```dart
-import 'dart:async';
-```
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
 
-## Langkah 2: Tambah class NumberStream
-
-Tetap di file stream.dart tambah class baru seperti berikut.
-
-```dart
-class NumberStream {
-}
-```
-
-## Langkah 3: Tambah StreamController
-
-Di dalam class NumberStream buatlah variabel seperti berikut.
-
-```dart
-final StreamController<int> controller = StreamController<int>();
-```
-
-## Langkah 4: Tambah method addNumberToSink
-
-Tetap di class NumberStream buatlah method ini
-
-```dart
-  void addNumberToSink(int newNumber) {
-    controller.sink.add(newNumber);
-  }
-```
-
-## Langkah 5: Tambah method close()
-
-```dart
-  close() {
-    controller.close();
-  }
-```
-
-## Langkah 6: Buka main.dart
-
-Ketik kode import seperti berikut
-
-```dart
-import 'dart:async';
-import 'dart:math';
-```
-
-## Langkah 7: Tambah variabel
-
-Di dalam class \_StreamHomePageState ketik variabel berikut
-
-```dart
-  int lastNumber = 0;
-  late StreamController numberStreamController;
-  late NumberStream numberStream;
-```
-
-## Langkah 8: Edit initState()
-
-```dart
   @override
-  void initState() {
-    numberStream = NumberStream();
-    numberStreamController = numberStream.controller;
-    Stream stream = numberStreamController.stream;
-    stream.listen((event) {
-      setState(() {
-        lastNumber = event;
-      });
-    });
-    super.initState();
-  }
-```
-
-## Langkah 9: Edit dispose()
-
-```dart
-  @override
-  void dispose() {
-    numberStreamController.close();
-    super.dispose();
-  }
-```
-
-## Langkah 10: Tambah method addRandomNumber()
-
-```dart
-void addRandomNumber() {
-  Random random = Random();
-  int myNum = random.nextInt(10);
-  numberStream.addNumberToSink(myNum);
-}
-```
-
-## Langkah 11: Edit method build()
-
-```dart
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(lastNumber.toString()),
-            ElevatedButton(
-              onPressed: () => addRandomNumber(),
-              child: const Text('New Random Number'),
-            )
-          ],
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter JSON Demo - taufik'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Soal 1 - Merubah Warna Tema Aplikasi',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+              color: Colors.blue.shade900,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
+    );
+  }
+}
 ```
 
-## Langkah 12: Run
+3. Lakukan commit hasil jawaban Soal 1 dengan pesan "W13: Jawaban Soal 1"
 
-Lakukan running pada aplikasi Flutter Anda, maka akan terlihat seperti gambar berikut.
+   hasil kode penuh
 
-## Soal 6
+   ```dart
+   import 'package:flutter/material.dart';
 
-#### Jelaskan maksud kode langkah 8 dan 10 tersebut!
+   void main() {
+   runApp(const MyApp());
+   }
 
-**Langkah 8 (initState):**
+   class MyApp extends StatelessWidget {
+   const MyApp({super.key});
 
-Kode pada `initState()` berfungsi untuk melakukan inisialisasi dan konfigurasi stream saat widget pertama kali dibuat. Tahapan yang dilakukan meliputi pembuatan instance `NumberStream` sebagai sumber data, pengambilan referensi `StreamController` untuk mengakses stream-nya, kemudian melakukan subscription terhadap stream tersebut menggunakan method `listen()`. Setiap kali ada event (data baru) yang dipancarkan melalui stream, listener akan menangkapnya dan memanggil `setState()` untuk memperbarui nilai variabel `lastNumber`, yang kemudian memicu rebuild widget untuk menampilkan nilai terbaru di UI. Mekanisme ini menciptakan reaktivitas data dimana perubahan pada stream secara otomatis tercermin pada tampilan aplikasi.
+   @override
+   Widget build(BuildContext context) {
+       return MaterialApp(
+       title: 'Flutter JSON Demo - taufik',
+       theme: ThemeData(
+           scaffoldBackgroundColor: Colors.blue.shade50,
+           appBarTheme: AppBarTheme(
+           backgroundColor: Colors.blue.shade900,
+           elevation: 0,
+           titleTextStyle: const TextStyle(
+               color: Colors.white,
+               fontSize: 20,
+               fontWeight: FontWeight.bold,
+           ),
+           ),
+       ),
+       home: const MyHomePage(),
+       );
+   }
+   }
 
-**Langkah 10 (addRandomNumber):**
+   class MyHomePage extends StatelessWidget {
+   const MyHomePage({super.key});
 
-Method `addRandomNumber()` berperan sebagai trigger untuk menginjeksikan data ke dalam stream. Prosesnya dimulai dengan membuat instance `Random` untuk menghasilkan angka acak, kemudian menggunakan `nextInt(10)` untuk mendapatkan bilangan bulat acak dalam rentang 0 hingga 9. Angka yang dihasilkan tersebut kemudian dikirimkan ke stream melalui method `addNumberToSink()` dari `NumberStream`, yang secara internal memanfaatkan `controller.sink.add()` untuk memasukkan data ke dalam stream. Data ini selanjutnya akan ditangkap oleh listener yang telah didefinisikan pada `initState()`, menciptakan alur data searah dari source (sink) menuju subscriber (listener) yang merupakan konsep fundamental dari arsitektur stream.
+   @override
+   Widget build(BuildContext context) {
+       return Scaffold(
+       appBar: AppBar(
+           title: const Text('Flutter JSON Demo - taufik'),
+       ),
+       body: Center(
+           child: Padding(
+           padding: const EdgeInsets.all(16.0),
+           child: Text(
+               'Soal 1 - Merubah Warna Tema Aplikasi',
+               textAlign: TextAlign.center,
+               style: TextStyle(
+               fontSize: 24,
+               color: Colors.blue.shade900,
+               fontWeight: FontWeight.bold,
+               ),
+             ),
+           ),
+         ),
+       );
+     }
+   }
+   ```
 
-#### Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+### Langkah 3: Buat folder baru assets
 
-![Praktikum 2](img/pratikum02.webp)
+Buat folder baru assets di root project Anda
 
-#### Lalu lakukan commit dengan pesan "W12: Jawaban Soal 6".
+### Langkah 4: Buat file baru pizzalist.json
 
----
+Letakkan file ini di dalam folder assets, lalu salin data JSON berikut ke file tersebut.
 
-## Langkah 13: Buka stream.dart
+```json
+[
+  {
+    "id": 1,
+    "pizzaName": "Margherita",
+    "description": "Pizza with tomato, fresh mozzarella and basil",
+    "price": 8.75,
+    "imageUrl": "images/margherita.png"
+  },
+  {
+    "id": 2,
+    "pizzaName": "Marinara",
+    "description": "Pizza with tomato, garlic and oregano",
+    "price": 7.5,
+    "imageUrl": "images/marinara.png"
+  },
+  {
+    "id": 3,
+    "pizzaName": "Napoli",
+    "description": "Pizza with tomato, garlic and anchovies",
+    "price": 9.5,
+    "imageUrl": "images/marinara.png"
+  },
+  {
+    "id": 4,
+    "pizzaName": "Carciofi",
+    "description": "Pizza with tomato, fresh mozzarella and artichokes",
+    "price": 8.8,
+    "imageUrl": "images/marinara.png"
+  },
+  {
+    "id": 5,
+    "pizzaName": "Bufala",
+    "description": "Pizza with tomato, buffalo mozzarella and basil",
+    "price": 12.5,
+    "imageUrl": "images/marinara.png"
+  }
+]
+```
 
-Tambahkan method berikut ini.
+### Langkah 5: Edit pubspec.yaml
+
+Tambahkan referensi folder assets ke file pubspec.yaml seperti berikut ini.
+
+```yaml
+uses-material-design: true
+assets:
+  - assets/pizzalist.json
+```
+
+### Langkah 6: Edit maint.dart
+
+Buatlah variabel seperti berikut ini class \_MyHomePageState.
 
 ```dart
-  addError() {
-    controller.sink.addError('error');
+  String pizzaString = '';
+```
+
+### Langkah 7: Tetap di main.dart
+
+Untuk membaca isi dari file pizzalist.json di dalam class \_MyHomePageState, tambahkan method readJsonFile seperti kode berikut untuk membaca file json.
+
+```dart
+  Future readJsonFile() async {
+    String myString = await DefaultAssetBundle.of(context)
+        .loadString('assets/pizzalist.json');
+
+    setState(() {
+      pizzaString = myString;
+    });
   }
 ```
 
-## Langkah 14: Buka main.dart
+### Langkah 8: Panggil method readJsonFile
 
-Tambahkan method onError di dalam class StreamHomePageState pada method listen di fungsi initState() seperti berikut ini.
+Panggil method readJsonFile di initState
 
 ```dart
   @override
   void initState() {
-    numberStream = NumberStream();
-    numberStreamController = numberStream.controller;
-    Stream stream = numberStreamController.stream;
-    stream.listen((event) {
-      setState(() {
-        lastNumber = event;
-      });
-    }).onError((error) {
-      setState(() {
-        lastNumber = -1;
-      });
-    });
     super.initState();
+    readJsonFile();
   }
 ```
 
-## Langkah 15: Edit method addRandomNumber()
+### Langkah 9: Tampilkan hasil JSON
 
-Lakukan comment pada dua baris kode berikut, lalu ketik kode seperti berikut ini.
+Kemudian tampilkan hasil JSON di body scaffold.
 
 ```dart
-  void addRandomNumber() {
-    Random random = Random();
-    // int myNum = random.nextInt(10);
-    // numberStream.addNumberToSink(myNum);
-    numberStream.addError();
-  }
+body:Text(pizzaString),
 ```
 
-## Soal 7
+### Langkah 10: Run
 
-### Jelaskan maksud kode langkah 13 sampai 15 tersebut!
+Jika kode sudah benar, seharusnya tampil seperti gambar berikut ini.
 
-Ketiga langkah tersebut mengimplementasikan mekanisme error handling dalam stream untuk menangani kondisi eksepsional yang mungkin terjadi selama pemrosesan data.
+![hasil json](img/1.png)
 
-**Langkah 13** menambahkan method `addError()` pada class `NumberStream` yang berfungsi sebagai interface untuk menginjeksikan error ke dalam stream melalui `controller.sink.addError()`, memungkinkan simulasi atau penanganan kondisi error secara terkontrol.
+### Soal 2
 
-**Langkah 14** melengkapi listener dengan callback `onError()` yang akan terpicu ketika stream mengirimkan error, dimana implementasinya mengubah nilai `lastNumber` menjadi -1 sebagai indikator visual bahwa telah terjadi error, memberikan feedback kepada pengguna tentang kondisi abnormal aplikasi.
+Masukkan hasil capture layar ke laporan praktikum Anda.
 
-**Langkah 15** memodifikasi method `addRandomNumber()` untuk men-trigger error dengan memanggil `numberStream.addError()` sebagai pengganti pengiriman data normal, berfungsi sebagai simulasi untuk menguji apakah mekanisme error handling bekerja dengan baik. Kombinasi ketiga langkah ini menciptakan alur error handling yang lengkap: dari injeksi error (source), propagasi melalui stream, hingga penanganan di subscriber (listener), yang merupakan praktik penting dalam pengembangan aplikasi robust untuk menangani skenario failure dengan graceful degradation.
+![hasil json](img/1.png)
 
-### Kembalikan kode seperti semula pada Langkah 15, comment addError() agar Anda dapat melanjutkan ke praktikum 3 berikutnya.
+Lakukan commit hasil jawaban Soal 2 dengan pesan "W13: Jawaban Soal 2"
+
+### Langkah 11: Buat file baru pizza.dart
+
+Kita ingin mengubah data json tersebut dari String menjadi objek List. Maka perlu membuat file class baru di folder lib/model dengan nama file pizza.dart.
+
+### Langkah 12: Model pizza.dart
+
+Ketik kode berikut pada file pizza.dart
 
 ```dart
-  void addRandomNumber() {
-    Random random = Random();
-    int myNum = random.nextInt(10);
-    numberStream.addNumberToSink(myNum);
-    // numberStream.addError();
-  }
+class Pizza {
+  final int id;
+  final String pizzaName;
+  final String description;
+  final double price;
+  final String imageUrl;
+}
 ```
 
-#### Lakukan commit dengan pesan "W12: Jawaban Soal 7".
+### Langkah 13: Buat constructor()
 
----
-
-# Praktikum 3: Injeksi data ke streams
-
-Skenario yang umum dilakukan adalah melakukan manipulasi atau transformasi data stream sebelum sampai pada UI end user. Hal ini sangatlah berguna ketika Anda membutuhkan untuk filter data berdasarkan kondisi tertentu, melakukan validasi data, memodifikasinya, atau melakukan proses lain yang memicu beberapa output baru. Contohnya melakukan konversi angka ke string, membuat sebuah perhitungan, atau menghilangkan data yang berulang terus tampil.
-
-Pada praktikum 3 ini, Anda akan menggunakan StreamTransformers ke dalam stream untuk melakukan map dan filter data.
-
-Setelah Anda menyelesaikan praktikum 2, Anda dapat melanjutkan praktikum 3 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
-
-## Langkah 1: Buka main.dart
-
-Tambahkan variabel baru di dalam class \_StreamHomePageState
+Di dalam class Pizza definisikan constructor fromJson, yang mana akan mengambil data berupa Map sebagai parameter dan mengubah Map ke objek Pizza seperti kode berikut:
 
 ```dart
-  late StreamTransformer transformer;
-```
-
-## Langkah 2: Tambahkan kode ini di initState
-
-```dart
-    transformer = StreamTransformer<int, int>.fromHandlers(
-      handleData: (value, sink) {
-        sink.add(value * 10);
-      },
-      handleError: (error, trace, sink) {
-        sink.add(-1);
-      },
-      handleDone: (sink) => sink.close(),
+  factory Pizza.fromJson(Map<String, dynamic> json) {
+    return Pizza(
+      id: json['id'] ?? 0,
+      pizzaName: json['pizzaName'] ?? '',
+      description: json['description'] ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      imageUrl: json['imageUrl'] ?? '',
     );
+  }
 ```
 
-## Langkah 3: Tetap di initState
+### Langkah 14: Pindah ke class \_MyHomePageState
 
-Lakukan edit seperti kode berikut.
+Tambahkan kode jsonDecode seperti berikut.
 
 ```dart
-    stream.transform(transformer).listen((event) {
+  Future<List<Pizza>> readJsonFile() async {
+    String myString = await DefaultAssetBundle.of(context)
+        .loadString('assets/pizzalist.json');
+    List pizzaMapList = jsonDecode(myString);
+```
+
+### Langkah 15: Pastikan impor class
+
+Perhatikan pada bagian atas file bahwa telah berhasil impor kedua file berikut.
+
+```dart
+import 'dart:convert';
+import 'package:store_data_taufik/model/pizza.dart';
+```
+
+Anda telah berhasil mengimpor pustaka yang diperlukan dan melakukan decoding string JSON menjadi List pizzaMapList pada Langkah ini. Selanjutnya, kita akan mengonversi List Map tersebut menjadi List objek Dart (List<Pizza>).
+
+### Langkah 16: Konversi List Map ke List Objek Dart
+
+Di dalam method readJsonFile(), setelah baris List pizzaMapList = jsonDecode(myString);, tambahkan kode berikut untuk mengonversi setiap Map di pizzaMapList menjadi objek Pizza dan menyimpannya ke myPizzas.
+
+```dart
+    List<Pizza> myPizzas = [];
+    for (var pizza in pizzaMapList) {
+      Pizza myPizza = Pizza.fromJson(pizza);
+      myPizzas.add(myPizza);
+    }
+```
+
+### Langkah 17: return myPizzas
+
+Hapus atau komentari setState yang menampilkan pizzaString dari Langkah 7. Kemudian, kembalikan myPizzas.
+
+```dart
+    return myPizzas;
+```
+
+### Langkah 18: Perbarui Signature Method
+
+Perbarui signature method readJsonFile() untuk secara eksplisit menunjukkan bahwa ia mengembalikan Future yang berisi List.
+
+```dart
+ Future<List<Pizza>> readJsonFile() async {
+```
+
+### Langkah 19: Deklarasikan Variabel State
+
+Di dalam class \_MyHomePageState, deklarasikan variabel state baru untuk menampung List objek Pizza.
+
+```dart
+    List<Pizza> myPizzas = [];
+```
+
+### Langkah 20: Panggil di initState dan Perbarui State
+
+Perbarui method initState() di \_MyHomePageState untuk memanggil readJsonFile(). Karena readJsonFile() mengembalikan Future, gunakan .then() untuk mendapatkan hasilnya, dan perbarui state myPizzas.
+
+```dart
+  @override
+  void initState() {
+    super.initState();
+    readJsonFile().then((value) {
       setState(() {
-        lastNumber = event;
-      });
-    }).onError((error) {
-      setState(() {
-        lastNumber = -1;
+        myPizzas = value;
       });
     });
+  }
 ```
 
-## Langkah 4: Run
+### Langkah 21: Tampilkan Data di ListView
 
-Terakhir, run atau tekan F5 untuk melihat hasilnya jika memang belum running. Bisa juga lakukan hot restart jika aplikasi sudah running. Maka hasilnya akan seperti gambar berikut ini. Anda akan melihat tampilan angka dari 0 hingga 90.
+Perbarui body dari Scaffold untuk menggunakan ListView.builder yang menampilkan pizzaName sebagai judul dan description sebagai subjudul dari setiap objek Pizza.
 
-## Soal 8
+```dart
+body: ListView.builder(
+  itemCount: myPizzas.length,
+  itemBuilder: (context, index) {
+    return ListTile(
+      title: Text(myPizzas[index].pizzaName),
+      subtitle: Text(myPizzas[index].description),
+    );
+  },
+ ));
+}
+```
 
-### Jelaskan maksud kode langkah 1-3 tersebut!
+### Langkah 22: Run
 
-Ketiga langkah tersebut mengimplementasikan transformasi data stream menggunakan `StreamTransformer` untuk memodifikasi nilai sebelum sampai ke listener. **Langkah 1** mendeklarasikan variabel `transformer` bertipe `StreamTransformer` yang akan berfungsi sebagai middleware untuk memproses data stream. **Langkah 2** melakukan inisialisasi transformer dengan `StreamTransformer<int, int>.fromHandlers()` yang mendefinisikan tiga handler: `handleData` untuk mentransformasi setiap nilai input dengan mengalikannya 10 (misalnya angka 5 menjadi 50), `handleError` untuk menangani error dengan mengubahnya menjadi nilai -1, dan `handleDone` untuk menutup sink ketika stream selesai. **Langkah 3** mengaplikasikan transformer ke stream menggunakan method `transform()` sebelum melakukan subscription dengan `listen()`, sehingga setiap data yang melewati stream akan terlebih dahulu ditransformasi (dikali 10) sebelum diterima oleh listener dan di-update ke UI melalui `setState()`. Mekanisme ini mendemonstrasikan konsep data pipeline dalam reactive programming, dimana data dapat diproses dan dimodifikasi secara deklaratif sebelum mencapai destination akhir, memungkinkan pemisahan logic transformasi dari logic presentasi untuk arsitektur yang lebih maintainable.
+Jalankan aplikasi. Sekarang, Anda akan melihat data pizza ditampilkan dalam daftar yang lebih terstruktur sebagai objek List Dart.
 
-#### Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+![hasil model pizza](img/1.png)
 
-![Praktikum 3](img/pratikum03.webp)
+### Soal 3
 
-#### Lakukan commit dengan pesan "W12: Jawaban Soal 8".
+Masukkan hasil capture layar ke laporan praktikum Anda.
+![hasil model pizza](img/1.png)
+
+Lakukan commit hasil jawaban Soal 2 dengan pesan "W13: Jawaban Soal 3"
+
+### Langkah 23: Tambahkan Method toJson() (Serialization)
+
+Di file pizza.dart, tambahkan method toJson() ke class Pizza. Method ini berfungsi untuk mengonversi objek Dart kembali menjadi Map (langkah pertama menuju JSON String).
+
+```dart
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'pizzaName': pizzaName,
+      'description': description,
+      'price': price,
+      'imageUrl': imageUrl,
+    };
+  }
+```
+
+### Langkah 24: Buat Fungsi Konversi JSON String
+
+Di main.dart, tambahkan fungsi convertToJSON di dalam \_MyHomePageState untuk menggunakan jsonEncode (dari dart:convert) yang mengubah List objek Dart menjadi JSON String.
+
+```dart
+  String convertToJSON(List<Pizza> pizzas) {
+    return jsonEncode(pizzas.map((pizza) => pizza.toJson()).toList());
+  }
+```
+
+### Langkah 25: Tampilkan Output JSON di Konsol
+
+Di method readJsonFile(), tambahkan kode untuk memanggil convertToJSON dan mencetak hasilnya ke Debug Console sebelum mengembalikan myPizzas.
+
+```dart
+String json = convertToJSON(myPizzas);
+print(json);
+return myPizzas;
+```
+
+### Langkah 26: Cek Output Konsol
+
+Jalankan aplikasi. Periksa Debug Console untuk melihat List objek Pizza telah berhasil dikonversi kembali menjadi JSON String.
+
+![serial json](img/1.png)
+
+# PRAKTIKUM 2
+
+### Langkah 1: Simulasikan Error
+
+Anggaplah Anda telah mengganti file pizzalist.json dengan data yang tidak konsisten.
+
+### Langkah 2: Lihat Error Tipe Data String ke Int
+
+Jika ID pizza di JSON dikirim sebagai String (misalnya "id": "1" di JSON) sementara model Dart mengharapkan int, Anda akan melihat runtime error.
+
+### Langkah 3: Terapkan tryParse dan Null Coalescing pada ID
+
+Di Pizza.fromJson (file pizza.dart), ganti cara mendapatkan nilai id menggunakan int.tryParse dan null coalescing operator (??) untuk memberikan nilai default 0 jika parsing gagal atau nilainya null. Tujuannya adalah memastikan nilai id selalu integer.
+
+### Langkah 4: Simulasikan Error Null pada String
+
+Jika Anda menjalankan ulang dan ada bidang yang hilang (misalnya imageUrl hilang), Anda mungkin mendapatkan error Null.
+
+### Langkah 5: Terapkan Null Coalescing pada String
+
+Tambahkan null coalescing operator (??) pada imageUrl untuk memberikan string kosong ('') jika nilai yang diterima adalah null. Lakukan hal yang sama untuk bidang String lainnya seperti pizzaName dan description jika perlu.
+
+### Langkah 6: Gunakan toString() untuk Field String
+
+Untuk memastikan semua nilai yang digunakan sebagai String benar-benar String (bahkan jika mereka mungkin dikirim sebagai int atau tipe lain), gunakan toString().
+
+### Langkah 7: Simulasikan Error Tipe Data String ke Double
+
+Jika Anda menjalankan ulang, Anda mungkin menemukan error saat mengonversi String ke Double untuk bidang price.
+
+### Langkah 8: Terapkan double.tryParse
+
+Terapkan double.tryParse dengan null coalescing (?? 0) untuk bidang price, sama seperti yang Anda lakukan pada id.
+
+### Langkah 9: Run dan Perhatikan Output Null
+
+Setelah mengimplementasikan semua perbaikan tipe data, aplikasi akan berjalan, tetapi mungkin menampilkan "null" di UI jika ada bidang yang hilang atau gagal diparsing (seperti pizzaName atau description).
+
+![TEST NULL](img/21.jpg)
+
+### Langkah 10: Tambahkan Operator Ternary untuk Output User-Friendly
+
+Perbaiki masalah tampilan "null" dengan menambahkan operator ternary yang memeriksa apakah nilai null sebelum mengubahnya menjadi String. Jika null, berikan nilai pengganti yang ramah pengguna seperti 'No name' atau string kosong ('').
+
+```dart
+  factory Pizza.fromJson(Map<String, dynamic> json) {
+    return Pizza(
+      id: int.tryParse(json['id'].toString()) ?? 0,
+      pizzaName: json['pizzaName'] != null ? json['pizzaName'].toString() : 'No name',
+      description: json['description'] != null ? json['description'].toString() : '',
+      price: double.tryParse(json['price'].toString()) ?? 0.0,
+      imageUrl: json['imageUrl'] != null ? json['imageUrl'].toString() : '',
+    );
+  }
+```
+
+### Langkah 11: Run
+
+Jalankan aplikasi. Sekarang data yang tidak konsisten telah ditangani dengan baik, dan UI tidak menampilkan nilai null.
+
+![tidak menampilkan null](img/2.jpg)
+
+### Soal 4
+
+Capture hasil running aplikasi Anda, kemudian impor ke laporan praktikum Anda!
+Lalu lakukan commit dengan pesan "W13: Jawaban Soal 4".
+
+![tidak menampilkan null](img/2.jpg)
+
+# PRAKTIKUM 3
+
+### Langkah 1: Buka pizza.dart dan Buat Konstanta
+
+Di bagian atas file pizza.dart, di luar class Pizza, deklarasikan konstanta untuk setiap kunci JSON.
+
+### Langkah 2: Perbarui fromJson() menggunakan Konstanta
+
+Di constructor Pizza.fromJson, ganti semua string literal kunci JSON (misalnya 'id') dengan konstanta yang sesuai (keyId).
+
+Catatan: Konstruktor ini menggunakan sintaks inisialisasi, tetapi untuk kesederhanaan, kita menggunakan sintaks body.
+
+### Langkah 3: Perbarui toJson() menggunakan Konstanta
+
+Perbarui juga method toJson() agar menggunakan konstanta yang sama.
+
+### Langkah 4: Run
+
+Jalankan aplikasi. Tidak akan ada perubahan visual, tetapi kode Anda kini lebih safe dan maintainable.
+
+### Soal 5
+
+Jelaskan maksud kode lebih safe dan maintainable!
+
+jawab:
+
+### 1. Lebih aman jika terjadi Bug
+
+- **Mencegah Typo (Salah Ketik)**
+
+  - String manual: jika kita menulis `'pizaName'` (typo kurang `z`), kode tetap bisa dicompile, tetapi akan menyebabkan error saat runtime (data tidak muncul atau aplikasi crash). Kesalahan ini sulit dilacak.
+  - Konstanta: jika kita menulis `keyNam` (typo kurang `e`), editor (misalnya VS Code) langsung menandai error (compile-time error). Kesalahan bisa diketahui sebelum aplikasi dijalankan.
+
+- **Konsistensi**  
+  Menjamin bahwa kunci yang dipakai di `fromJson` dan `toJson` selalu sama persis.
+
+### 2. Lebih Mudah untuk maintenance
+
+- **Perubahan Terpusat (Single Source of Truth)**
+  - Cara lama: jika API server berubah, misalnya kunci `'pizzaName'` diganti menjadi `'name'`, kita harus mencari dan mengganti semua `'pizzaName'` di seluruh file proyek. Jika ada yang terlewat, aplikasi akan error.
+  - Dengan konstanta: cukup ubah satu baris di deklarasi konstanta:
+    ```dart
+    const String keyName = 'name';
+    ```
+    Semua bagian kode lain yang menggunakan `keyName` otomatis mengikuti perubahan tersebut.
 
 ---
 
-# Praktikum 4: Subscribe ke stream events
+2. Lebih mudah untuk Dikelola
 
-Dari praktikum sebelumnya, Anda telah menggunakan method listen mendapatkan nilai dari stream. Ini akan menghasilkan sebuah Subscription. Subscription berisi method yang dapat digunakan untuk melakukan listen pada suatu event dari stream secara terstruktur.
+   Perubahan Terpusat (Single Source of Truth):
 
-Pada praktikum 4 ini, kita akan gunakan Subscription untuk menangani event dan error dengan teknik praktik baik (best practice), dan menutup Subscription tersebut.
+   Bayangkan jika API dari server berubah, misalnya kunci 'pizzaName' diganti menjadi 'name'.
+
+   Cara Lama: Kita harus mencari tulisan 'pizzaName' di seluruh file proyek (bisa puluhan file) dan menggantinya satu per satu. Jika terlewat satu saja, aplikasi error.
+
+   Cara Konstanta: Kita cukup mengubah satu baris kode saja di bagian deklarasi konstanta (const String keyName = 'name';). Seluruh bagian kode lain yang menggunakan keyName akan otomatis mengikuti perubahan tersebut.
+
+#### Capture hasil praktikum Anda dan lampirkan di README.
+
+![penanganan error](img/03.webp)
+Lalu lakukan commit dengan pesan "W13: Jawaban Soal 5".
+
+# PRAKTIKUM 4
+
+Praktikum 4: SharedPreferences
+Praktikum ini membahas menyimpan data sederhana dengan SharedPreferences. Kita akan menggunakan shared_preferences untuk menyimpan hitungan sederhana.
 
 Setelah Anda menyelesaikan praktikum 3, Anda dapat melanjutkan praktikum 4 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
 
-## Langkah 1: Tambah variabel
+Perhatian: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 3.
 
-Tambahkan variabel berikut di class \_StreamHomePageState
+### Langkah 1: Tambahkan Dependensi
 
-```dart
-  late StreamSubscription subscription;
+Di Terminal, tambahkan package shared_preferences.
+
+```pub
+flutter pub add shared_preferences
 ```
 
-## Langkah 2: Edit initState()
+### Langkah 2: Install Dependensi
 
-Edit kode seperti berikut ini.
+Jalankan flutter pub get jika editor Anda tidak melakukannya secara otomatis.
+
+### Langkah 3: Lakukan Import
+
+Di file main.dart, tambahkan import untuk shared_preferences.
 
 ```dart
-    subscription = stream.transform(transformer).listen((event) {
-      setState(() {
-        lastNumber = event;
-      });
+import 'package:shared_preferences/shared_preferences.dart';
+```
+
+### Langkah 4: Tambahkan Variabel appCounter
+
+Di dalam class \_MyHomePageState (atau State class yang Anda gunakan), deklarasikan variabel appCounter.
+
+```dart
+  int appCounter = 0;
+```
+
+### Langkah 5: Buat Method readAndWritePreference
+
+Buat method asinkron readAndWritePreference().
+
+```dart
+  Future<void> readAndWritePreference() async {}
+```
+
+### Langkah 6: Dapatkan Instance SharedPreferences
+
+Di dalam method tersebut, dapatkan instance SharedPreferences. Perlu diingat bahwa ini adalah operasi asinkron, jadi gunakan await.
+
+```dart
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+```
+
+### Langkah 7: Baca, Cek Null, dan Increment Counter
+
+Baca nilai appCounter dari storage. Gunakan null coalescing (?? 0) untuk memastikan nilai default 0 jika data belum ada. Kemudian increment nilai tersebut.
+
+```dart
+    appCounter = prefs.getInt('appCounter') ?? 0;
+    appCounter++;
+```
+
+### Langkah 8: Simpan Nilai Baru
+
+Simpan nilai appCounter yang sudah di-increment kembali ke storage menggunakan prefs.setInt().
+
+```dart
+    await prefs.setInt('appCounter', appCounter);
+```
+
+### Langkah 9: Perbarui State
+
+Panggil setState() untuk memperbarui UI dengan nilai baru appCounter.
+
+```dart
+    setState(() {
+      appCounter = appCounter;
     });
-```
-
-## Langkah 3: Tetap di initState()
-
-Tambahkan kode berikut ini.
-
-```dart
-    subscription.onError((error) {
-      setState(() {
-        lastNumber = -1;
-      });
-    });
-```
-
-## Langkah 4: Tambah properti onDone()
-
-Tambahkan dibawahnya kode ini setelah onError
-
-```dart
-    subscription.onDone(() {
-      print('OnDone was called');
-    });
-```
-
-## Langkah 5: Tambah method baru
-
-Ketik method ini di dalam class \_StreamHomePageState
-
-```dart
-  void stopStream() {
-    numberStreamController.close();
   }
 ```
 
-## Langkah 6: Pindah ke method dispose()
+### Langkah 10: Panggil di initState()
 
-Jika method dispose() belum ada, Anda dapat mengetiknya dan dibuat override. Ketik kode ini didalamnya.
+Panggil readAndWritePreference() di initState() agar penghitung dibaca saat aplikasi pertama kali dibuka.
+
+```dart
+  void initState() {
+    super.initState();
+    readAndWritePreference();
+  }
+```
+
+### Langkah 11: Perbarui Tampilan (body)
+
+Ganti body Scaffold Anda dengan tata letak yang menampilkan hitungan dan tombol 'Reset counter'.
+
+```dart
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              'You have opened the app $appCounter times.',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                deletePreference();
+              },
+              child: const Text('Reset Counter'),
+            ),
+          ],
+```
+
+### Langkah 12: Run
+
+Aplikasi sekarang akan menampilkan "You have opened the app 1 times" (jika ini pembukaan pertama).
+
+![shared preferences](img/05.png)
+
+### Langkah 13: Buat Method deletePreference()
+
+Tambahkan method asinkron deletePreference() yang berfungsi untuk menghapus data menggunakan prefs.clear().
+
+```dart
+  Future<void> deletePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    setState(() {
+      appCounter = 0;
+    });
+  }
+```
+
+### Langkah 14: Panggil deletePreference()
+
+Hubungkan deletePreference() ke tombol 'Reset counter'.
+
+```dart
+              onPressed: () {
+                deletePreference();
+              },
+              child: const Text('Reset Counter'),
+```
+
+### Langkah 15: Run
+
+Jalankan aplikasi. Tombol reset sekarang akan berfungsi, menghapus semua pasangan kunci-nilai dan mereset hitungan.
+
+![try reset](img/05.png)
+
+### Soal 6
+
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+
+![try reset](img/05.png)
+
+Lalu lakukan commit dengan pesan "W13: Jawaban Soal 6".
+
+# PRAKTIKUM 5
+
+Praktikum 5: Akses filesystem dengan path_provider
+Praktikum ini berfokus untuk mengakses file system menggunakan path_provider untuk menemukan direktori umum (documents dan temp) pada perangkat.
+
+Setelah Anda menyelesaikan praktikum 4, Anda dapat melanjutkan praktikum 5 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+Perhatian: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 4.
+
+### Langkah 1: Tambahkan Dependensi
+
+Tambahkan package path_provider melalui Terminal.
+
+```dart
+flutter pub add path_provider
+```
+
+### Langkah 2: Lakukan Import
+
+Di file main.dart, tambahkan import untuk path_provider.
+
+```dart
+import 'package:path_provider/path_provider.dart';
+```
+
+### Langkah 3: Tambahkan Variabel Path State
+
+Di State class Anda, tambahkan variabel untuk menyimpan jalur direktori dokumen dan temporer.
+
+```dart
+  String documentPath = '';
+  String tempPath = '';
+```
+
+### Langkah 4: Buat Method getPaths()
+
+Buat method asinkron getPaths() yang menggunakan getApplicationDocumentsDirectory() dan getTemporaryDirectory() untuk mengambil jalur sistem file yang tepat, lalu perbarui state.
+
+```dart
+  Future getPaths() async {
+    final docDir = await getApplicationDocumentsDirectory();
+    final tempDir = await getTemporaryDirectory();
+    setState(() {
+      documentPath = docDir.path;
+      tempPath = tempDir.path;
+    });
+  }
+```
+
+### Langkah 5: Panggil getPaths() di initState()
+
+Panggil getPaths() di initState().
+
+```dart
+@override
+void initState() {
+  super.initState();
+  getPaths();
+}
+```
+
+### Langkah 6: Perbarui Tampilan
+
+Perbarui body Scaffold untuk menampilkan kedua jalur yang telah diambil.
+
+```dart
+Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Path Provider - taufik')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              'Document Path:\n$documentPath',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16),
+            ),
+            const Divider(),
+            Text(
+              'Temporary Path:\n$tempPath',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+```
+
+### Langkah 7: Run
+
+Jalankan aplikasi. Anda akan melihat path absolut ke direktori dokumen dan cache aplikasi di perangkat Anda.
+
+![path provider](img/06.jpg)
+
+### Soal 7
+
+Capture hasil praktikum Anda dan lampirkan di README.
+Lalu lakukan commit dengan pesan "W13: Jawaban Soal 7".
+
+# PRAKTIKUM 6
+
+Praktikum ini melanjutkan dari Praktikum 5, berfokus pada akses file system untuk mengakses directories, menggunakan library dart:io untuk operasi file.
+
+Setelah Anda menyelesaikan praktikum 5, Anda dapat melanjutkan praktikum 6 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+Perhatian: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 5.
+
+### Langkah 1: Lakukan Import dart:io
+
+Di file main.dart, tambahkan import untuk pustaka dart:io.
+
+```dart
+import 'dart:io';
+```
+
+### Langkah 2: Tambahkan Variabel File dan Text
+
+Di State class, tambahkan variabel myFile (dengan modifier late) dan fileText untuk menyimpan konten yang akan dibaca.
+
+```dart
+  late File myFile;
+  String fileText = '';
+```
+
+### Langkah 3: Buat Method writeFile()
+
+Buat method asinkron writeFile() yang menggunakan myFile.writeAsString() untuk menulis konten ke file. Kata ‘Margherita, Capricciosa, Napoli' silakan Anda ganti dengan Nama Lengkap dan NIM Anda.
+
+```dart
+Future<bool> writeFile() async {
+  try {
+    await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+```
+
+### Langkah 4: Inisialisasi File dan Panggil writeFile() di initState()
+
+Perbarui initState(): setelah getPaths() selesai, inisialisasi myFile dengan jalur lengkap di direktori dokumen, dan panggil writeFile().
 
 ```dart
   @override
-  void dispose() {
-    subscription.cancel();
-    super.dispose();
+  void initState() {
+    super.initState();
+    readAndWritePreference();
+    getPaths().then((_) {
+      myFile = File('$documentPath/pizzas.txt');
+      writeFile();
+    });
   }
 ```
 
-## Langkah 7: Pindah ke method build()
+### Langkah 5: Buat Method readFile()
 
-Tambahkan button kedua dengan isi kode seperti berikut ini.
-
-```dart
-            ElevatedButton(
-              onPressed: () => stopStream(),
-              child: const Text('Stop Subscription'),
-            ),
-```
-
-## Langkah 8: Edit method addRandomNumber()
-
-Edit kode seperti berikut ini.
+Buat method asinkron readFile() yang menggunakan myFile.readAsString() untuk membaca konten file dan memperbarui fileText melalui setState().
 
 ```dart
-  void addRandomNumber() {
-    Random random = Random();
-    int myNum = random.nextInt(10);
-    if (!numberStreamController.isClosed) {
-      numberStream.addNumberToSink(myNum);
-    } else {
+  Future<bool> readFile() async {
+    try {
+      String fileContent = await myFile.readAsString();
       setState(() {
-        lastNumber = -1;
+        fileText = fileContent;
       });
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 ```
 
-## Langkah 9: Run
+### Langkah 6: Edit build() dan Tambahkan Tombol Baca
 
-Anda akan melihat dua button seperti gambar berikut.
-
-## Langkah 10: Tekan button 'Stop Subscription'
-
-Anda akan melihat pesan di Debug Console seperti berikut.
-
-## Soal 9
-
-### Jelaskan maksud kode langkah 2, 6 dan 8 tersebut!
-
-**Langkah 2 (Edit initState):**
-
-Pada langkah ini, hasil dari `stream.transform(transformer).listen()` disimpan ke dalam variabel `subscription` bertipe `StreamSubscription`. Berbeda dengan praktikum sebelumnya yang langsung melakukan chaining method, pendekatan ini menyimpan referensi subscription sehingga memungkinkan kontrol yang lebih eksplisit terhadap lifecycle stream. Dengan menyimpan subscription sebagai variabel instance, kita dapat mengakses method-method seperti `pause()`, `resume()`, `cancel()`, dan menambahkan callback seperti `onError()` dan `onDone()` secara terpisah, yang merupakan best practice dalam pengelolaan stream subscription untuk memastikan resource management yang proper.
-
-**Langkah 6 (Edit dispose):**
-
-Method `dispose()` dimodifikasi untuk memanggil `subscription.cancel()` sebagai pengganti `numberStreamController.close()`. Pemanggilan `cancel()` pada subscription sangat penting untuk mencegah memory leak dengan memutuskan listening terhadap stream ketika widget di-destroy. Ini merupakan implementasi proper cleanup dalam lifecycle widget Flutter, dimana setiap resource yang dialokasikan saat `initState()` harus dilepaskan saat `dispose()`. Dengan membatalkan subscription, kita memastikan bahwa tidak ada callback yang akan dipanggil setelah widget tidak lagi ada dalam widget tree, mencegah error yang muncul dari pemanggilan `setState()` pada widget yang sudah di-dispose.
-
-**Langkah 8 (Edit addRandomNumber):**
-
-Method ini ditambahkan dengan pengecekan kondisi `!numberStreamController.isClosed` sebelum mengirim data ke stream. Pengecekan ini mencegah error yang terjadi ketika mencoba menambahkan data ke stream yang sudah ditutup (closed). Jika controller masih terbuka, data akan dikirim normal melalui `addNumberToSink()`, namun jika sudah tertutup (misalnya setelah button 'Stop Subscription' ditekan), aplikasi akan menampilkan nilai -1 sebagai indikator bahwa stream sudah tidak aktif. Implementasi defensive programming ini meningkatkan robustness aplikasi dengan graceful handling terhadap operasi pada closed stream, menghindari exception yang dapat menyebabkan crash.
-
-### Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
-
-![Praktikum 4](img/pratikum04.webp)
-
-### Lalu lakukan commit dengan pesan "W12: Jawaban Soal 9".
-
----
-
-# Praktikum 5: Multiple stream subscriptions
-
-Secara default, stream hanya bisa digunakan untuk satu subscription. Jika Anda mencoba untuk melakukan subscription yang sama lebih dari satu, maka akan terjadi error. Untuk menangani hal itu, tersedia broadcast stream yang dapat digunakan untuk multiple subscriptions. Pada praktikum ini, Anda akan mencoba untuk melakukan multiple stream subscriptions.
-
-Setelah Anda menyelesaikan praktikum 4, Anda dapat melanjutkan praktikum 5 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
-
-## Langkah 1: Buka file main.dart
-
-Ketik variabel berikut di class \_StreamHomePageState
+Di method build(), tambahkan ElevatedButton yang memanggil readFile() dan Text yang menampilkan fileText di bawahnya.
 
 ```dart
-  late StreamSubscription subscription2;
-  String values = '';
+          children: [
+            Text(
+              'Document Path:\n$documentPath',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 14),
+            ),
+            const Divider(),
+            Text(
+              'Temporary Path:\n$tempPath',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 14),
+            ),
+            const Divider(),
+            ElevatedButton(
+              onPressed: () => readFile(),
+              child: const Text('Read File'),
+            ),
+            Text(
+              fileText,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+            ),
+          ],
 ```
 
-## Langkah 2: Edit initState()
+### Langkah 7: Run
 
-Ketik kode seperti berikut.
+Jalankan aplikasi. Setelah menekan tombol 'Read File', konten yang ditulis (Margherita, Capricciosa, Napoli) akan ditampilkan atau sesuai nama dan NIM Anda.
+
+![akses file system direktori](img/06.jpg)
+
+### Soal 8
+
+Jelaskan maksud kode pada langkah 3 dan 7 !
+
+Pada implementasi tersebut, metode `writeFile()` dirancang sebagai operasi asinkron (_asynchronous_) yang bertugas menyimpan data string—secara spesifik teks _'Margherita, Capricciosa, Napoli'_—ke dalam direktori file lokal menggunakan perintah `writeAsString()`. Fungsi ini menerapkan mekanisme penanganan pengecualian (_exception handling_), di mana keberhasilan operasi penyimpanan akan ditandai dengan nilai kembalian (_return value_) `true`. Sebaliknya, apabila terjadi kegagalan sistem, blok `catch` akan mengantisipasinya dengan mengembalikan nilai `false`.
+
+Dari sisi antarmuka pengguna (_User Interface_), interaksi difasilitasi melalui komponen `ElevatedButton`. Ketika tombol ini diaktifkan oleh pengguna, sistem akan memicu eksekusi fungsi `readFile()` untuk mengambil data yang tersimpan, yang kemudian divisualisasikan kembali pada layar melalui widget `Text` agar informasi tersebut dapat diakses oleh pengguna.
+
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+Lalu lakukan commit dengan pesan "W13: Jawaban Soal 8".
+
+# PRAKTIKUM 7
+
+### Langkah 1: Tambahkan Dependensi
+
+Tambahkan package flutter_secure_storage melalui Terminal.
 
 ```dart
-    subscription2 = stream.listen((event) {
-      setState(() {
-        values += '$event - ';
-      });
-    });
+flutter pub add flutter_secure_storage
 ```
 
-## Langkah 3: Run
+### Langkah 2: Lakukan Import
 
-Lakukan run maka akan tampil error `Bad state: Stream has already been listened to` karena stream masih berupa single subscription.
-
-## Soal 10
-
-### Jelaskan mengapa error itu bisa terjadi ?
-
-Error "Bad state: Stream has already been listened to" terjadi karena secara default, `StreamController` membuat single-subscription stream yang hanya dapat di-listen oleh satu subscriber pada satu waktu. Ketika kita mencoba membuat `subscription2` dengan memanggil `stream.listen()` untuk kedua kalinya pada stream yang sama, Dart runtime mendeteksi bahwa stream tersebut sudah memiliki listener aktif (yaitu `subscription` yang dibuat sebelumnya) dan melemparkan exception sebagai mekanisme proteksi.
-
-Hal ini merupakan design decision dari Dart untuk mencegah race condition dan memastikan data consistency, karena single-subscription stream dioptimalkan untuk skenario dimana hanya ada satu konsumen yang memproses data secara berurutan. Dalam konteks stream events, setiap event hanya akan dikirimkan ke satu listener, sehingga jika ada multiple listeners, akan timbul ambiguitas tentang siapa yang seharusnya menerima event tersebut. Untuk menangani kebutuhan multiple subscriptions, Dart menyediakan broadcast stream melalui `StreamController.broadcast()` yang secara khusus didesain untuk mendistribusikan event yang sama ke multiple listeners secara concurrent, dengan trade-off bahwa late subscribers tidak akan menerima events yang sudah dipancarkan sebelumnya.
-
-### Lakukan commit dengan pesan "W12: Jawaban Soal 10".
-
----
-
-## Langkah 4: Set broadcast stream
-
-Ketik kode seperti berikut di method initState()
+Di main.dart, impor package yang diperlukan.
 
 ```dart
-  @override
-  void initState() {
-    numberStream = NumberStream();
-    numberStreamController = numberStream.controller;
-    Stream stream = numberStreamController.stream.asBroadcastStream();
-    ...
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 ```
 
-## Langkah 5: Edit method build()
+### Langkah 3: Tambahkan Variabel dan Controller
 
-Tambahkan text seperti berikut
+Di State class (\_MyHomePageState), tambahkan TextEditingController dan variabel untuk menyimpan kata sandi yang dibaca.
 
 ```dart
-            children: [
-              Text(lastNumber.toString()),
-              ElevatedButton(
-                onPressed: () => addRandomNumber(),
-                child: const Text('New Random Number'),
-              ),
-              ElevatedButton(
-                onPressed: () => stopStream(),
-                child: const Text('Stop Subscription'),
-              ),
-              Text(values),
-            ],
+final pwdController = TextEditingController();
+String myPass = '';
 ```
 
-## Langkah 6: Run
+### Langkah 4: Inisialisasi Secure Storage
 
-Tekan button 'New Random Number' beberapa kali, maka akan tampil teks angka terus bertambah sebanyak dua kali.
-
-## Soal 11
-
-### Jelaskan mengapa hal itu bisa terjadi ?
-
-Fenomena munculnya angka dua kali (duplicated) terjadi karena kita menggunakan broadcast stream dengan dua subscription yang berbeda (`subscription` dan `subscription2`) yang keduanya mendengarkan stream yang sama. Ketika method `asBroadcastStream()` dipanggil, stream yang awalnya single-subscription berubah menjadi broadcast stream yang memungkinkan multiple listeners untuk menerima event yang sama secara simultan.
-
-Dalam implementasi ini, `subscription` menerima data yang sudah ditransformasi (dikali 10) dan menampilkannya di `lastNumber`, sedangkan `subscription2` menerima data original (tanpa transformasi) dan menampilkannya dalam string `values`. Setiap kali button 'New Random Number' diklik, satu angka random (0-9) diinjeksikan ke stream, dan karena stream adalah broadcast, event tersebut didistribusikan ke semua listener yang aktif. Hasilnya, kita melihat dua representasi dari angka yang sama: satu dalam bentuk hasil transformasi di `lastNumber` dan satu lagi dalam bentuk akumulasi string di `values`, menciptakan efek "dua kali" yang sebenarnya merupakan dua perspektif berbeda terhadap data yang sama dari dua subscriber yang independen.
-
-### Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
-
-![Praktikum 5](img/pratikum05.webp)
-
-### Lakukan commit dengan pesan "W12: Jawaban Soal 11".
-
----
-
-# Praktikum 6: StreamBuilder
-
-StreamBuilder adalah sebuah widget untuk melakukan listen terhadap event dari stream. Ketika sebuah event terkirim, maka akan dibangun ulang semua turunannya. Seperti halnya widget FutureBuilder pada pertemuan pekan lalu, StreamBuilder berguna untuk membangun UI secara reaktif yang diperbarui setiap data baru tersedia.
-
-Setelah Anda menyelesaikan praktikum 5, Anda dapat melanjutkan praktikum 6 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
-
-## Langkah 1: Buat Project Baru
-
-Buatlah sebuah project flutter baru dengan nama streambuilder_Taufik di folder codelab_week12
-
-## Langkah 2: Buat file baru stream.dart
-
-Ketik kode ini
+Di State class, inisialisasi FlutterSecureStorage dan tentukan kuncinya.
 
 ```dart
-import 'dart:math';
-
-class NumberStream {
-
-}
+  final storage = const FlutterSecureStorage();
+  final String myKey = "myPass";
 ```
 
-## Langkah 3: Tetap di file stream.dart
+### Langkah 5: Buat Method writeToSecureStorage()
 
-Ketik kode seperti berikut.
+Buat method asinkron untuk menulis data dari pwdController ke secure storage.
 
 ```dart
-  Stream<int> getNumbers() async* {
-    yield* Stream.periodic(const Duration(seconds: 1), (int t) {
-      Random random = Random();
-      int myNum = random.nextInt(10);
-      return myNum;
-    });
+  Future<void> writeToSecureStorage() async {
+    await storage.write(key: myKey, value: pwdController.text);
   }
 ```
 
-## Langkah 4: Edit main.dart
+### Langkah 6: Buat Method readFromSecureStorage()
 
-Ketik kode seperti berikut ini.
-
-```dart
-import 'package:flutter/material.dart';
-import 'stream.dart';
-import 'dart:async';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Stream',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
-      home: const StreamHomePage(),
-    );
-  }
-}
-
-class StreamHomePage extends StatefulWidget {
-  const StreamHomePage({super.key});
-
-  @override
-  State<StreamHomePage> createState() => _StreamHomePageState();
-}
-
-class _StreamHomePageState extends State<StreamHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-```
-
-## Langkah 5: Tambah variabel
-
-Di dalam class \_StreamHomePageState, ketikan variabel ini.
+Buat method asinkron untuk membaca data dari secure storage.
 
 ```dart
-  late Stream<int> numberStream;
-```
-
-## Langkah 6: Edit initState()
-
-Ketik kode seperti berikut.
-
-```dart
-  @override
-  void initState() {
-    numberStream = NumberStream().getNumbers();
-    super.initState();
+  Future<String> readFromSecureStorage() async {
+    return await storage.read(key: myKey) ?? "";
   }
 ```
 
-## Langkah 7: Edit method build()
+### Langkah 7: Edit build() untuk UI dan Logic
+
+Perbarui method build() untuk menyertakan TextField dan dua ElevatedButton (Save Value dan Read Value). Hubungkan method save ke tombol Save Value.
 
 ```dart
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Stream'),
-      ),
-      body: StreamBuilder(
-        stream: numberStream,
-        initialData: 0,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            print('Error!');
-          }
-          if (snapshot.hasData) {
-            return Center(
-              child: Text(
-                snapshot.data.toString(),
-                style: const TextStyle(fontSize: 96),
-              ),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
-      ),
-    );
-  }
+// Di dalam body: Column children:
+TextField(
+  controller: pwdController,
+),
+ElevatedButton(child: const Text('Save Value'), onPressed: () {
+  writeToSecureStorage();
+}),
+// ...
 ```
 
-## Langkah 8: Run
+### Langkah 8: Hubungkan Read ke Tombol
 
-Hasilnya, setiap detik akan tampil angka baru seperti berikut.
+Hubungkan method read ke tombol Read Value, perbarui myPass dan UI melalui setState().
 
-## Soal 12
+```dart
+            ElevatedButton(
+              onPressed: () {
+                writeToSecureStorage();
+                pwdController.clear();
+              },
+              child: const Text('Save Value'),
+            ),
 
-### Jelaskan maksud kode pada langkah 3 dan 7 !
+            const SizedBox(height: 10),
 
-**Langkah 3 (Method getNumbers):**
+            ElevatedButton(
+              onPressed: () async {
+                String value = await readFromSecureStorage();
+                setState(() {
+                  myPass = value;
+                });
+```
 
-Method `getNumbers()` mengembalikan `Stream<int>` yang menghasilkan aliran data berupa angka integer secara asynchronous menggunakan generator function (`async*`). Implementasinya menggunakan `yield*` untuk mendelegasikan seluruh output dari `Stream.periodic()` yang berfungsi membangkitkan event secara berkala setiap 1 detik. Pada setiap interval, callback function menerima parameter `t` (tick counter) yang kemudian diabaikan, dan sebagai gantinya dibuat instance `Random` untuk menghasilkan angka acak antara 0-9 menggunakan `nextInt(10)`. Angka random ini dikembalikan dan menjadi data yang dipancarkan oleh stream. Dengan demikian, stream ini akan terus menghasilkan angka random baru setiap detik tanpa henti, cocok untuk skenario yang membutuhkan data real-time yang berubah secara periodik.
+### Langkah 9: Run
 
-**Langkah 7 (StreamBuilder Widget):**
+Jalankan aplikasi. Masukkan teks, simpan, lalu baca kembali. Teks tersebut seharusnya ditampilkan, menandakan data telah disimpan dan diambil dengan aman.
 
-`StreamBuilder` adalah widget khusus Flutter yang secara otomatis melakukan listening terhadap stream dan merebuild UI setiap kali ada data baru. Widget ini menerima tiga parameter utama: `stream` yang merupakan sumber data (numberStream), `initialData` yang menentukan nilai awal sebelum stream mengirim data pertama (0), dan `builder` yang merupakan callback function untuk membangun widget tree berdasarkan state terkini dari stream. Parameter `snapshot` dalam builder menyimpan informasi lengkap tentang state stream termasuk data, error, dan connection state. Logika builder mengimplementasikan conditional rendering: jika terjadi error (`hasError`), akan print pesan error; jika ada data (`hasData`), menampilkan angka dengan font size 96 di tengah layar; dan jika tidak ada kondisi yang terpenuhi (initial state), menampilkan empty widget (`SizedBox.shrink()`). Pendekatan reactive ini menghilangkan kebutuhan manual subscription management dan setState(), membuat kode lebih deklaratif dan maintainable.
+![stored value](img/07.webp)
 
-### Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+### Soal 9
 
-![Praktikum 6](img/pratikum06.webp)
-
-### Lalu lakukan commit dengan pesan "W12: Jawaban Soal 12".
+Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+Lalu lakukan commit dengan pesan "W13: Jawaban Soal 9".
