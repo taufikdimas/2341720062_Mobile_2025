@@ -119,6 +119,117 @@ _Aplikasi berhasil menampilkan daftar pizza dari Mock API dengan nama dan harga 
 
 ---
 
+## Praktikum 2: Mengirim Data ke Web Service (POST)
+
+### Langkah 1-3: Setup Mock API untuk POST
+
+1. Login ke [WireMock Cloud](https://app.wiremock.cloud/)
+2. Buat stub baru dengan konfigurasi:
+   - Nama: Post Pizza
+   - Verb: POST
+   - Path: `/pizza`
+   - Status: 201
+   - Body Type: json
+   - Body: `{"message": "The pizza was posted"}`
+3. Simpan stub
+
+### Langkah 4: Tambahkan method postPizza di HttpHelper
+
+```dart
+Future<String> postPizza(Pizza pizza) async {
+  const postPath = '/pizza';
+  String post = json.encode(pizza.toJson());
+  Uri url = Uri.https(authority, postPath);
+  http.Response r = await http.post(
+    url,
+    body: post,
+  );
+  return r.body;
+}
+```
+
+### Langkah 5-12: Buat PizzaDetailScreen
+
+Buat file `lib/pizza_detail.dart` yang berisi:
+
+- TextEditingController untuk ID, Name, Description, Price, ImageUrl
+- Form untuk input data pizza
+- Button untuk mengirim POST request
+- Tampilan hasil operasi POST
+
+### Langkah 13-14: Update main.dart
+
+Tambahkan FloatingActionButton untuk navigasi ke PizzaDetailScreen:
+
+```dart
+floatingActionButton: FloatingActionButton(
+  child: const Icon(Icons.add),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PizzaDetailScreen(),
+      ),
+    );
+  },
+),
+```
+
+### Soal 2
+
+**Tugas:**
+
+1. ✅ Tambahkan field baru dalam JSON maupun POST ke Wiremock
+2. ✅ Capture hasil aplikasi berupa GIF
+
+**Implementasi:**
+
+**1. Model Pizza dengan toJson():**
+
+```dart
+class Pizza {
+  int id;
+  String pizzaName;
+  String description;
+  double price;
+  String imageUrl;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'pizzaName': pizzaName,
+      'description': description,
+      'price': price,
+      'imageUrl': imageUrl,
+    };
+  }
+}
+```
+
+**2. Pizza Detail Screen:**
+Screen ini menyediakan form untuk input data pizza baru dengan 5 field:
+
+- ID (int)
+- Pizza Name (String)
+- Description (String)
+- Price (double)
+- Image URL (String)
+
+Setelah user mengisi form dan menekan tombol "Send Post", aplikasi akan:
+
+1. Membuat objek Pizza dari input user
+2. Convert ke JSON menggunakan `toJson()`
+3. Kirim POST request ke WireMock API
+4. Menampilkan response dari server
+
+**Screenshot Hasil:**
+
+![POST Pizza Success](img/W14_Soal2.gif)
+
+_Aplikasi berhasil mengirim data pizza baru ke server menggunakan POST request dan menampilkan response "The pizza was posted"._
+
+---
+
 # Praktikum 1: Konversi Dart model ke JSON
 
 ### Langkah 1: Buat Project Baru

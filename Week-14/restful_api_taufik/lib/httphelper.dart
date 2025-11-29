@@ -12,7 +12,7 @@ class HttpHelper {
   }
 
   final String authority = '24y7w.wiremockapi.cloud';
-  final String path = 'pizzalist';
+  final String path = 'pizza';
 
   Future<List<Pizza>> getPizzaList() async {
     try {
@@ -82,5 +82,13 @@ class HttpHelper {
     ''';
     final jsonResponse = json.decode(jsonString);
     return jsonResponse.map<Pizza>((i) => Pizza.fromJson(i)).toList();
+  }
+
+  Future<String> postPizza(Pizza pizza) async {
+    const postPath = '/pizza';
+    String post = json.encode(pizza.toJson());
+    Uri url = Uri.https(authority, postPath);
+    http.Response r = await http.post(url, body: post);
+    return r.body;
   }
 }
