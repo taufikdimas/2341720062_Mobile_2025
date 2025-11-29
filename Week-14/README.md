@@ -1,7 +1,3 @@
-# Praktikum 1: Konversi Dart model ke JSON
-
-Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda (ketik di README.md) pada setiap soal yang ada di beberapa langkah praktikum ini.
-
 ---
 
 # WEEK 14 - RESTful API
@@ -227,6 +223,179 @@ Setelah user mengisi form dan menekan tombol "Send Post", aplikasi akan:
 ![POST Pizza Success](img/W14_Soal2.gif)
 
 _Aplikasi berhasil mengirim data pizza baru ke server menggunakan POST request dan menampilkan response "The pizza was posted"._
+
+---
+
+## Praktikum 3: Memperbarui Data di Web Service (PUT)
+
+### Langkah 1-3: Setup Mock API untuk PUT
+
+1. Login ke [WireMock Cloud](https://app.wiremock.cloud/)
+2. Buat stub baru dengan konfigurasi:
+   - Nama: Put Pizza
+   - Verb: PUT
+   - Path: `/pizza`
+   - Status: 200
+   - Body Type: json
+   - Body: `{"message": "Pizza was updated"}`
+3. Simpan stub
+
+### Langkah 4: Tambahkan method putPizza di HttpHelper
+
+```dart
+Future<String> putPizza(Pizza pizza) async {
+  const putPath = '/pizza';
+  String put = json.encode(pizza.toJson());
+  Uri url = Uri.https(authority, putPath);
+  http.Response r = await http.put(
+    url,
+    body: put,
+  );
+  return r.body;
+}
+```
+
+### Langkah 5: Update PizzaDetailScreen Constructor
+
+Tambahkan properti Pizza dan boolean isNew:
+
+```dart
+class PizzaDetailScreen extends StatefulWidget {
+  final Pizza pizza;
+  final bool isNew;
+
+  const PizzaDetailScreen({
+    super.key,
+    required this.pizza,
+    required this.isNew,
+  });
+}
+```
+
+### Langkah 6: Override initState
+
+Jika bukan pizza baru, isi TextField dengan data pizza yang ada:
+
+```dart
+@override
+void initState() {
+  if (!widget.isNew) {
+    txtId.text = widget.pizza.id.toString();
+    txtName.text = widget.pizza.pizzaName;
+    txtDescription.text = widget.pizza.description;
+    txtPrice.text = widget.pizza.price.toString();
+    txtImageUrl.text = widget.pizza.imageUrl;
+  }
+  super.initState();
+}
+```
+
+### Langkah 7: Update method savePizza
+
+Gunakan conditional untuk POST atau PUT:
+
+```dart
+Future savePizza() async {
+  HttpHelper helper = HttpHelper();
+  Pizza pizza = Pizza();
+  pizza.id = int.tryParse(txtId.text) ?? 0;
+  pizza.pizzaName = txtName.text;
+  pizza.description = txtDescription.text;
+  pizza.price = double.tryParse(txtPrice.text) ?? 0.0;
+  pizza.imageUrl = txtImageUrl.text;
+
+  final result = await (widget.isNew
+      ? helper.postPizza(pizza)
+      : helper.putPizza(pizza));
+
+  setState(() {
+    operationResult = result;
+  });
+}
+```
+
+### Langkah 8: Update ListTile di main.dart
+
+Tambahkan onTap untuk navigasi dengan pizza yang dipilih:
+
+```dart
+return ListTile(
+  title: Text(snapshot.data![position].pizzaName),
+  subtitle: Text(
+    snapshot.data![position].description +
+        ' - € ' +
+        snapshot.data![position].price.toString(),
+  ),
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PizzaDetailScreen(
+          pizza: snapshot.data![position],
+          isNew: false,
+        ),
+      ),
+    );
+  },
+);
+```
+
+### Langkah 9: Update FloatingActionButton
+
+Pass Pizza baru dengan isNew true:
+
+```dart
+floatingActionButton: FloatingActionButton(
+  child: const Icon(Icons.add),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PizzaDetailScreen(
+          pizza: Pizza(),
+          isNew: true,
+        ),
+      ),
+    );
+  },
+),
+```
+
+### Soal 3
+
+**Tugas:**
+
+1. ✅ Ubah salah satu data dengan Nama dan NIM Anda
+2. ✅ Perhatikan hasilnya di Wiremock
+3. ✅ Capture hasil aplikasi berupa GIF
+
+**Implementasi:**
+
+**1. Fitur Edit Pizza:**
+Aplikasi kini memiliki 2 mode:
+
+- **Mode Tambah (isNew = true)**: Ketika user menekan FloatingActionButton (+), form kosong akan muncul dan menggunakan POST
+- **Mode Edit (isNew = false)**: Ketika user tap pada ListTile pizza, form akan terisi dengan data pizza tersebut dan menggunakan PUT
+
+**2. Perbedaan POST vs PUT:**
+
+- **POST**: Mengirim data baru ke server (Create)
+- **PUT**: Memperbarui data yang sudah ada di server (Update)
+
+**3. Flow Update Pizza:**
+
+1. User tap pizza dari list
+2. PizzaDetailScreen terbuka dengan data pizza yang dipilih
+3. User mengubah data (misalnya nama menjadi "Taufik - 2341720062")
+4. User klik tombol "Save"
+5. Aplikasi memanggil `putPizza()` karena `isNew = false`
+6. Server response: "Pizza was updated"
+
+**Screenshot Hasil:**
+
+![PUT Pizza Success](img/W14_Soal3.gif)
+
+_Aplikasi berhasil memperbarui data pizza yang sudah ada menggunakan PUT request. Data pizza yang dipilih dari list dapat diedit dan disimpan kembali ke server._
 
 ---
 
